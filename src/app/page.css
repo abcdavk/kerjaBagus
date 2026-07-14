@@ -1,0 +1,48 @@
+.hero-section-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  overflow: hidden;
+}
+
+.hero-section-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background-image: url("/background/homepage.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  z-index: -1;
+}
+
+.hero-section-content {
+  position: relative;
+
+  text-align: center;
+}
+
+.cta-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  overflow: hidden;
+}
+
+.cta-content {
+  position: relative;
+
+  text-align: center;
+}
