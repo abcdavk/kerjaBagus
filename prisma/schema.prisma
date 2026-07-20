@@ -11,3 +11,63 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+enum UserRole {
+  CLIENT
+  FREELANCER
+  ADMIN
+}
+
+model User {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  passwordHash   String
+
+  isClient       Boolean @default(true)
+  isFreelancer   Boolean @default(false)
+  isAdmin        Boolean @default(false)
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  profile        Profile?
+}
+
+model Profile {
+  id          String   @id @default(cuid())
+
+  displayName String
+  username    String   @unique
+
+  avatar      String?
+
+  banner      String?
+
+  headline    String
+
+  bio         String?  @db.Text
+
+  location    String?
+
+  website     String?
+
+  github      String?
+
+  linkedin    String?
+
+  portfolio   String?
+
+  hourlyRate  Int?
+
+  currency    String?
+
+  isAvailable Boolean @default(true)
+
+  experience  Int?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId      String @unique
+  user        User @relation(fields: [userId], references: [id])
+}
