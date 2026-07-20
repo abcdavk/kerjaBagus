@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <nav className="absolute top-0 left-0 right-0 z-50 flex items-center bg-white justify-between px-15 py-4 shadow-md">
+    <nav className="sticky top-0 left-0 right-0 z-50 flex items-center bg-white justify-between px-15 py-4 shadow-md">
       <div id="logo">
         <Image
           src="/logo/kerjabagus_icon.svg"

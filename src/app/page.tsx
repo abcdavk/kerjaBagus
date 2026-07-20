@@ -74,8 +74,13 @@ export default function Home() {
             yang cocok untuk keahlianmu!
           </h2>
 
+          <p className="mt-5 text-xl text-gray-600">
+            Ribuan lowongan kerja harian dan bulanan terpercaya siap buat kamu
+            lamar sekarang.
+          </p>
+
           {/* SEARCH BAR */}
-          <div className="flex justify-center mt-8">
+          <div className="flex justify-center mt-5">
             <div className="relative w-full max-w-3xl" ref={wrapperRef}>
               <form className="flex items-center rounded-md bg-white/90 shadow-lg pl-6 pr-1.5 py-4 w-full">
                 {/* KATA KUNCI */}
