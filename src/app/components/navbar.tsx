@@ -1,9 +1,11 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <nav className="sticky top-0 z-50 flex items-center justify-between px-15 py-4 backdrop-blur-xl bg-white/20 border-b border-white/10">
+    <nav className="sticky top-0 left-0 right-0 z-50 flex items-center bg-white justify-between px-15 py-4 shadow-md">
       <div id="logo">
         <Image
           src="/logo/kerjabagus_icon.svg"
@@ -44,18 +46,14 @@ export default function Navbar() {
       <div className="flex gap-4">
         <Link
           href="/login"
-          className="text-[#F4991A] border border-[#F4991A] py-2 px-9 rounded-md
-        transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-103
-          cursor-pointer"
+          className="text-[#F4991A] border border-[#F4991A] py-2 px-9 rounded-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-103 cursor-pointer"
         >
           Masuk
         </Link>
 
         <Link
-        href="/register"
-          className="bg-[#F4991A] text-white  py-2 px-9 rounded-md
-        transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-103
-          cursor-pointer"
+          href="/register"
+          className="bg-[#F4991A] text-white py-2 px-9 rounded-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-103 cursor-pointer"
         >
           Daftar
         </Link>
