@@ -132,11 +132,14 @@ export default function Home() {
         </div>
       </section>
 
+      {/* JOB SECTION */}
       <section className="cta-container flex flex-col">
         <div className="cta-content mt-20">
           <h2 className="text-3xl font-semibold mb-8 text-center">
             Lowongan Terbaru
           </h2>
+
+          {/* JOB CARD */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {featuredJobs.map((job) => (
               <JobCard key={job.id} {...job} />

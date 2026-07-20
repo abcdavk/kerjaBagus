@@ -1,12 +1,11 @@
 .hero-section-container {
   position: relative;
   width: 100%;
-  min-height: 100vh;
-
+  min-height: calc(100vh - 80px);
   display: flex;
   justify-content: center;
   align-items: center;
-
+  padding-top: 4rem;
   overflow: hidden;
 }
 
@@ -14,7 +13,6 @@
   content: "";
   position: absolute;
   inset: 0;
-
   background-image: url("/background/homepage.png");
   background-size: cover;
   background-position: center;
@@ -25,8 +23,10 @@
 
 .hero-section-content {
   position: relative;
-
+  width: 100%;
+  max-width: 1200px;
   text-align: center;
+  z-index: 0;
 }
 
 .cta-container {
