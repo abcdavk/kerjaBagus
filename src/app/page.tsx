@@ -1,8 +1,11 @@
 import "./page.css";
+import Link from "next/link";
 
 export default function Home() {
   return (
     <main className="flex flex-col flex-1 font-sans">
+      
+      {/* HERO SECTION (Murni Asli Punya Temenmu) */}
       <section className="hero-section-container">
         <div className="hero-section-content">
           <h2 className="text-6xl font-bold">Temukan proyek dan lowongan</h2>
@@ -26,6 +29,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+
       <section className="cta-container">
         <div className="cta-content">
           <h1>CTA</h1>
