@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { RiArrowLeftLine } from "@remixicon/react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -29,7 +30,8 @@ export default function LoginPage() {
             onClick={() => router.back()}
             className="flex items-center gap-1 hover:underline"
           >
-            ← Kembali
+            <RiArrowLeftLine size={15} />
+            Kembali
           </button>
           <a href="#" className="flex items-center gap-1 hover:underline">
             {" "}

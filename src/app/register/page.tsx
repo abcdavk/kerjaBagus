@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { RiArrowLeftLine } from "@remixicon/react";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -26,7 +27,8 @@ export default function RegisterPage() {
           onClick={() => router.back()}
           className="flex items-center gap-1 hover:underline"
         >
-          ← Kembali
+          <RiArrowLeftLine size={15} />
+          Kembali
         </button>
 
         <h2 className="text-center text-xl font-bold text-gray-800">
