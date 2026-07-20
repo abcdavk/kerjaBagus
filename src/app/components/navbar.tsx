@@ -6,14 +6,14 @@ import { RiAddLine } from "@remixicon/react";
 
 export default function Navbar() {
   return (
-    <nav className="sticky top-0 left-0 right-0 z-50 flex items-center bg-white justify-between px-15 py-4 shadow-md">
-      <div id="logo">
+    <nav className="sticky top-0 z-50 h-20 flex items-center justify-between px-15 backdrop-blur-lg bg-white/20">
+      <div className="relative h-32 w-32">
         <Image
           src="/logo/kerjabagus_icon.svg"
           alt="Kerjabagus logo"
-          width={32}
-          height={32}
-          className="h-8 w-auto"
+          fill
+          priority
+          className="object-contain"
         />
       </div>
       <ul id="nav-links" className="flex gap-7">
