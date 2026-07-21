@@ -157,7 +157,7 @@ export default function Home() {
           </h2>
 
           {/* JOB CARD */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3 flex-wrap">
             {featuredJobs.map((job) => (
               <JobCard
                 key={job.id}

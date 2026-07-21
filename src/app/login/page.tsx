@@ -5,36 +5,43 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { RiArrowLeftLine } from "@remixicon/react";
+import { login } from "@/services/auth.service";
 
 export default function LoginPage() {
   const router = useRouter();
+
   const [email, setEmail] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [password, setPassword] = useState("");
+  
 
-  const handleLogin = (e: React.FormEvent) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
-    setErrorMsg("");
 
-    // 1. Ambil data user yang pernah register dari localStorage
-    const savedUser = localStorage.getItem("user_kerjabagus");
+    setLoading(true);
+    setError("");
 
-    if (!savedUser) {
-      setErrorMsg("Belum ada akun terdaftar. Silakan buat akun dulu!");
-      return;
-    }
+    try {
+      const res = await login({
+        email,
+        password,
+      });
 
-    const userData = JSON.parse(savedUser);
+      localStorage.setItem(
+        "kerjabagus_access_token",
+        res.accessToken
+      );
 
-    // 2. Cek apakah email yang diketik sama dengan email terdaftar
-    if (userData.email === email) {
-      // Trigger event agar Navbar otomatis berubah jadi avatar profil
-      window.dispatchEvent(new Event("userUpdated"));
-      
-      // Berhasil login -> Masuk ke Profile
       router.push("/profile");
-    } else {
-      // Email beda / tidak ditemukan
-      setErrorMsg("Email tidak terdaftar! Gunakan email saat Register.");
+    } catch (err) {
+      setError("Email atau password salah.");
+      console.error(err)
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -63,6 +70,7 @@ export default function LoginPage() {
             Kembali
           </button>
           <a href="#" className="flex items-center gap-1 hover:underline">
+            {/* {" "} */}
             Bantuan
           </a>
         </div>
@@ -72,39 +80,54 @@ export default function LoginPage() {
           Temukan karir impianmu disini.
         </p>
 
-        {/* Pesan Error Jika Email Salah */}
-        {errorMsg && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 text-xs rounded-lg">
-            {errorMsg}
-          </div>
-        )}
-
-        <form className="space-y-4" onSubmit={handleLogin}>
+        <form className="space-y-4" onSubmit={handleSubmit}>
+          {
+            error && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 text-xs rounded-lg">
+                {error}
+              </div>
+            )
+          }
           <div>
             <input
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
               placeholder="Masukkan alamat Email"
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-[#386641] focus:outline-none transition"
               required
             />
+            {/* <input
+              type="email"
+              placeholder="Masukkan alamat Email"
+              className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-[#386641] focus:outline-none transition"
+            /> */}
             <span className="text-[10px] text-gray-400 mt-1 block px-1">
               Contoh: email@karir.com
             </span>
+            <input
+              type="password"
+              value={password}
+              placeholder="Masukkan Password"
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-[#386641] focus:outline-none transition"
+            />
           </div>
 
           <button
             type="submit"
-            disabled={!email}
-            className={`w-full rounded-lg py-3 text-sm font-semibold transition ${
-              email
-                ? "bg-[#386641] text-white cursor-pointer hover:bg-[#2d5234]"
-                : "bg-gray-100 text-gray-400 cursor-not-allowed"
-            }`}
+            disabled={loading}
+            className="w-full rounded-lg bg-[#F4991A] py-3 text-sm font-semibold text-white transition cursor-pointer"
+          >
+            {loading ? "Masuk..." : "Masuk"}
+          </button>
+
+          {/* <button
+            type="button"
+            className="w-full rounded-lg bg-gray-100 py-3 text-sm font-semibold text-gray-400 cursor-not-allowed transition"
           >
             Lanjutkan
-          </button>
+          </button> */}
 
           <div className="text-center pt-2">
             <Link

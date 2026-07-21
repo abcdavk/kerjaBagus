@@ -1,11 +1,13 @@
 import { faker } from "@faker-js/faker";
+import bcrypt from "bcrypt";
 
-export function generateUser() {
+export async function generateUser() {
+  const hashedPassword = await bcrypt.hash("password123", 12);
   return {
     email: faker.internet.email().toLowerCase(),
 
     // nanti bisa diganti bcrypt hash
-    passwordHash: "password123",
+    passwordHash: hashedPassword,
 
     isClient: faker.datatype.boolean(),
     isFreelancer: faker.datatype.boolean(),

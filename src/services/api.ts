@@ -4,9 +4,14 @@ export async function api<T>(
 ): Promise<T> {
   const response = await fetch(path, init);
 
+  const data = await response.json().catch(() => null);
+
   if (!response.ok) {
-    throw new Error("API Error");
+    throw new Error(
+      data?.message ??
+      `Request failed (${response.status})`
+    );
   }
 
-  return response.json();
+  return data;
 }

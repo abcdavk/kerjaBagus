@@ -9,8 +9,9 @@ export async function seedUsers(prisma: PrismaClient, amount = 20) {
       data: generateAddress(),
     });
 
+    const userData = await generateUser();
     const user = await prisma.user.create({
-      data: generateUser(),
+      data: userData,
     });
 
     await prisma.profile.create({

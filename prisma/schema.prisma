@@ -22,8 +22,8 @@ model User {
   email          String   @unique
   passwordHash   String
 
-  isClient       Boolean @default(true)
-  isFreelancer   Boolean @default(false)
+  isClient       Boolean @default(false)
+  isFreelancer   Boolean @default(true)
   isAdmin        Boolean @default(false)
 
   createdAt      DateTime @default(now())
