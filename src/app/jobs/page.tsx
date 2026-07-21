@@ -13,8 +13,10 @@ export default function JobsPage() {
 
   useEffect(() => {
     async function load() {
+      // ini ku limit biar ga lag
+      // mungkin nanti bisa ditambahin page
       const { data } = await getJobs({
-        limit: 10,
+        limit: 12,
       });
 
       setJobs(data);
