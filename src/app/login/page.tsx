@@ -35,7 +35,7 @@ export default function LoginPage() {
         res.accessToken
       );
 
-      router.push("/");
+      router.push("/profile");
     } catch (err) {
       setError("Email atau password salah.");
       console.error(err)
