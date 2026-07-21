@@ -90,6 +90,7 @@ enum JobLocationType {
 model Job {
   id            String   @id @default(cuid())
 
+  company       String
 
   title         String
   description   String   @db.Text
@@ -100,7 +101,10 @@ model Job {
 
   deadline      DateTime?
 
+  isVerified    Boolean @default(false)
   isOpen        Boolean  @default(true)
+
+  tags          String[]
 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt

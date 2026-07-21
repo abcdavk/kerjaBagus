@@ -17,6 +17,8 @@ export async function POST(request: Request) {
 
     const job = await prisma.job.create({
       data: {
+        company: body.company,
+
         title: body.title,
         description: body.description,
         banner: body.banner,
@@ -30,7 +32,10 @@ export async function POST(request: Request) {
 
         locationType: body.locationType,
 
+        isVerified: body.isVerified ?? false,
         isOpen: body.isOpen ?? true,
+
+        tags: body.tags,
 
         profile: {
           connect: {
