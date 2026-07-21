@@ -31,7 +31,7 @@ export default function LoginPage() {
       });
 
       localStorage.setItem(
-        "access_token",
+        "kerjabagus_access_token",
         res.accessToken
       );
 
