@@ -36,7 +36,7 @@ export default function JobCard({
         {verified && (
           <span className="flex items-center gap-1 text-xs font-medium text-green-700 bg-green-50 px-2 py-1 rounded-full">
             <RiVerifiedBadgeFill size={14} />
-            Terverifikasi Aman
+            Terverifikasi
           </span>
         )}
       </div>
@@ -77,7 +77,7 @@ export default function JobCard({
           </button>
           <button
             type="button"
-            className="rounded-lg bg-primary text-white text-sm font-semibold px-5 py-2 hover:brightness-110 transition"
+            className="text-gray-900 text-sm font-semibold px-5 py-2 transition rounded-lg border border-gray-200 hover:bg-gray-50"
           >
             Lamar
           </button>

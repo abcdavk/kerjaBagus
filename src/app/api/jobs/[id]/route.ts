@@ -52,6 +52,8 @@ export async function PATCH(
       },
 
       data: {
+        company: body.company,
+
         title: body.title,
         description: body.description,
         banner: body.banner,
@@ -65,7 +67,10 @@ export async function PATCH(
 
         locationType: body.locationType,
 
+        isVerified: body.isVerified,
         isOpen: body.isOpen,
+
+        tags: body.tags,
       },
 
       include: {

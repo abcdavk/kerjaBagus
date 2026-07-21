@@ -8,6 +8,7 @@ export function generateJob() {
   });
 
   return {
+    company: faker.company.name(),
     title: faker.person.jobTitle(),
 
     description: faker.lorem.paragraphs(3),
@@ -25,7 +26,10 @@ export function generateJob() {
 
     deadline: faker.date.soon(),
 
+    isVerified: faker.datatype.boolean(),
     isOpen: true,
+
+    tags: [ faker.word.sample(), faker.word.sample(), faker.word.sample() ],
 
     locationType: faker.helpers.arrayElement([
       JobLocationType.REMOTE,
