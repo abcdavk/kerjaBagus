@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { RiAddLine } from "@remixicon/react";
-import { getInitials } from "../utils/user";
+import { getUsernameInitials } from "../utils/user";
 
 export default function Navbar() {
   const [user, setUser] = useState<{ name: string; email: string } | null>(null);
@@ -64,7 +64,7 @@ export default function Navbar() {
             className="flex items-center gap-3 px-4 py-1.5 rounded-full border border-[#F6D39E] bg-[#FBF6F0]/80 hover:bg-[#FBF6F0] transition"
           >
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#E2D2B4] text-xs font-bold text-[#386641]">
-              {getInitials(user.name)}
+              {getUsernameInitials(user.name)}
             </div>
             <span className="text-sm font-semibold text-[#386641] max-w-[120px] truncate">
               {user.name}
