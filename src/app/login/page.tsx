@@ -63,7 +63,7 @@ export default function LoginPage() {
           <button
             type="button"
             onClick={() => router.back()}
-            className="flex items-center gap-1 hover:underline"
+            className="flex items-center gap-1 hover:underline cursor-pointer"
           >
             <RiArrowLeftLine size={15} />
             Kembali
@@ -87,6 +87,7 @@ export default function LoginPage() {
               placeholder="Masukkan alamat Email"
               onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-[#386641] focus:outline-none transition"
+              required
             />
             {/* <input
               type="email"
@@ -147,25 +148,25 @@ export default function LoginPage() {
         <div className="space-y-3">
           <button
             type="button"
-            className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#386641] px-4 py-2.5 text-sm font-semibold text-[#386641] bg-white hover:bg-gray-50 transition"
+            onClick={() => router.push("/profile")}
+            className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#386641] px-4 py-2.5 text-sm font-semibold text-[#386641] bg-white hover:bg-gray-50 transition cursor-pointer"
           >
-            <span className="font-bold text-red-500">G</span> Masuk dengan
-            Google
+            <span className="font-bold text-red-500">G</span> Masuk dengan Google
           </button>
           <button
             type="button"
-            className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#386641] px-4 py-2.5 text-sm font-semibold text-[#386641] bg-white hover:bg-gray-50 transition"
+            onClick={() => router.push("/profile")}
+            className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#386641] px-4 py-2.5 text-sm font-semibold text-[#386641] bg-white hover:bg-gray-50 transition cursor-pointer"
           >
-            <span className="font-bold text-blue-700">f</span> Masuk dengan
-            Facebook
+            <span className="font-bold text-blue-700">f</span> Masuk dengan Facebook
           </button>
         </div>
 
         <div className="mt-8 pt-4 border-t border-gray-100 text-center text-xs text-gray-500">
           Apakah Anda HR?{" "}
-          <a href="#" className="text-[#386641] font-semibold hover:underline">
+          <Link href="/jobs/create" className="text-[#386641] font-semibold hover:underline">
             Buka Lowongan di KerjaBagus.com
-          </a>
+          </Link>
         </div>
       </div>
     </div>
