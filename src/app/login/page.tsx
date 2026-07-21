@@ -1,13 +1,48 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { RiArrowLeftLine } from "@remixicon/react";
+import { login } from "@/services/auth.service";
 
 export default function LoginPage() {
   const router = useRouter();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const res = await login({
+        email,
+        password,
+      });
+
+      localStorage.setItem(
+        "access_token",
+        res.accessToken
+      );
+
+      router.push("/");
+    } catch (err) {
+      setError("Email atau password salah.");
+      console.error(err)
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-start bg-gradient-to-b from-[#FAF8F0] via-[#FAF8F0] to-[#E2E8DD] px-4 pt-30 pb-16">
@@ -34,7 +69,7 @@ export default function LoginPage() {
             Kembali
           </button>
           <a href="#" className="flex items-center gap-1 hover:underline">
-            {" "}
+            {/* {" "} */}
             Bantuan
           </a>
         </div>
@@ -44,24 +79,53 @@ export default function LoginPage() {
           Temukan karir impianmu disini.
         </p>
 
-        <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <input
               type="email"
+              value={email}
               placeholder="Masukkan alamat Email"
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-[#386641] focus:outline-none transition"
             />
+            {/* <input
+              type="email"
+              placeholder="Masukkan alamat Email"
+              className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-[#386641] focus:outline-none transition"
+            /> */}
             <span className="text-[10px] text-gray-400 mt-1 block px-1">
               Contoh: email@karir.com
             </span>
+            <input
+              type="password"
+              value={password}
+              placeholder="Masukkan Password"
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-[#386641] focus:outline-none transition"
+            />
+            {
+              error && (
+                <div className="rounded-lg p-3 text-sm text-red-600">
+                  {error}
+                </div>
+              )
+            }
           </div>
 
           <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-lg bg-[#F4991A] py-3 text-sm font-semibold text-white transition cursor-pointer"
+          >
+            {loading ? "Masuk..." : "Masuk"}
+          </button>
+
+          {/* <button
             type="button"
             className="w-full rounded-lg bg-gray-100 py-3 text-sm font-semibold text-gray-400 cursor-not-allowed transition"
           >
             Lanjutkan
-          </button>
+          </button> */}
 
           <div className="text-center pt-2">
             <Link

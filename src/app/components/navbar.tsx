@@ -47,7 +47,7 @@ export default function Navbar() {
       <div className="flex gap-4">
         <Link
           href="/login"
-          className="text-[#77746E] border border-[#F6D39E] bg-[#FBF6F0] py-2 px-9 rounded-lg transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-103 cursor-pointer"
+          className="text-gray-900 border border-[#F6D39E] bg-[#FBF6F0]/20 backdrop-blur-xl py-2 px-9 rounded-lg transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-103 cursor-pointer"
         >
           Masuk
         </Link>

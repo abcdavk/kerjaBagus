@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import bcrypt from "bcrypt";
 
 export async function GET() {
   const users = await prisma.user.findMany({
@@ -14,13 +15,15 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
+    const hashedPassword = await bcrypt.hash(body.passwordHash, 12);
+
     const user = await prisma.user.create({
       data: {
         email: body.email,
-        passwordHash: body.passwordHash,
+        passwordHash: hashedPassword,
 
-        isClient: body.isClient ?? true,
-        isFreelancer: body.isFreelancer ?? false,
+        isClient: body.isClient ?? false,
+        isFreelancer: body.isFreelancer ?? true,
         isAdmin: body.isAdmin ?? false,
       },
 
