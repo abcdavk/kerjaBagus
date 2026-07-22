@@ -69,7 +69,7 @@ export default function EditableCard({
       ) : (
         <div
           onClick={() => setEditing(true)}
-          className="cursor-text min-h-6 w-full whitespace-pre-wrap break-words"
+          className="cursor-text min-h-6 w-full whitespace-pre-wrap break-words hover:border-gray-500 hover:border hover:px-2 hover:rounded w-fit"
         >
           {body || (
             <span className="text-gray-400 italic">

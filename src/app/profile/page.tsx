@@ -79,6 +79,14 @@ export default function ProfilePage() {
     });
   }
 
+  const handleOnChangeHeadline = async (value: string) => {
+    if (!profileData) return;
+    if (profileData.headline === value) return;
+    await updateProfile(profileData.id, {
+      headline: value
+    });
+  }
+
   return (
     <div className="min-h-screen bg-[#FAF8F0] px-6 py-10">
       <div className="max-w-4xl mx-auto space-y-6">
@@ -107,7 +115,7 @@ export default function ProfilePage() {
               </section>
 
 
-              <EditableCard initialBody={profileData?.headline ?? ""} widthType="wrap" maxLength={60} onChange={handleOnChangeBio} />
+              <EditableCard initialBody={profileData?.headline ?? ""} widthType="wrap" maxLength={60} onChange={handleOnChangeHeadline} />
               {/* <p className="text-md text-gray-500"></p> */}
 
               <p className="text-gray-400 mt-1 flex gap-2 font-light">
