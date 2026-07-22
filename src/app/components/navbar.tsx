@@ -7,30 +7,27 @@ import { RiAddLine, RiMenuLine, RiCloseLine } from "@remixicon/react";
 import { getUsernameInitials } from "../utils/user";
 import { me } from "@/services/auth.service";
 import { User } from "@/generated/prisma/client";
-import { getUser } from "@/services/user.service";
+import { getUser } from "@/services/users.service";
 import { GetUserResponse } from "@/models/user";
+import { GetProfileResponse } from "@/models/profile";
+import { getProfile } from "@/services/profiles.service";
 
 export default function Navbar() {
-  const [user, setUser] = useState<GetUserResponse | null>(null);
+  const [userData, setUserData] = useState<GetUserResponse | null>(null);
+  const [profileData, setProfileData] = useState<GetProfileResponse | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  const loadUser = () => {
-    const savedUser = localStorage.getItem("user_kerjabagus");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    } else {
-      setUser(null);
-    }
-  };
 
   useEffect(() => {
     async function loadUser() {
       try {
         const data = await me();
-        const userData = await getUser(data.user.id);
-        setUser(userData);
+        const user = await getUser(data.user.id);
+        const profile = await getProfile(data.user.id);
+        setUserData(user);
+        setProfileData(profile);
       } catch {
-        setUser(null);
+        setUserData(null);
+        setProfileData(null);
       }
     }
 
@@ -72,16 +69,16 @@ export default function Navbar() {
 
       {/* ACTIONS DESKTOP */}
       <div className="hidden lg:flex items-center gap-4">
-        {user ? (
+        {userData ? (
           <Link
             href="/profile"
             className="flex items-center gap-3 px-4 py-1.5 rounded-full border border-[#F6D39E] bg-[#FBF6F0]/80 hover:bg-[#FBF6F0] transition"
           >
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#E2D2B4] text-xs font-bold text-[#386641]">
-              {getUsernameInitials(user.profile?.displayName ?? "")}
+              {getUsernameInitials(profileData?.displayName ?? "")}
             </div>
             <span className="text-sm font-semibold text-[#386641] max-w-[120px] truncate">
-              {user.profile?.displayName ?? ""}
+              {profileData?.displayName ?? ""}
             </span>
           </Link>
         ) : (
@@ -127,17 +124,17 @@ export default function Navbar() {
           ))}
 
           <div className="border-t border-gray-100 mt-2 pt-3 flex flex-col gap-2">
-            {user ? (
+            {userData ? (
               <Link
                 href="/profile"
                 onClick={() => setMobileOpen(false)}
                 className="flex items-center gap-3 px-4 py-2 rounded-full border border-[#F6D39E] bg-[#FBF6F0]/80"
               >
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#E2D2B4] text-xs font-bold text-[#386641]">
-                  {getUsernameInitials(user.profile?.displayName ?? "")}
+                  {getUsernameInitials(profileData?.displayName ?? "")}
                 </div>
                 <span className="text-sm font-semibold text-[#386641] truncate">
-                  {user.profile?.displayName ?? ""}
+                  {profileData?.displayName ?? ""}
                 </span>
               </Link>
             ) : (
