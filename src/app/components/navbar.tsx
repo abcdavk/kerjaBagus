@@ -59,12 +59,12 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`sticky top-0 z-50 flex items-center justify-between h-20 px-4 md:px-15 transition-all duration-300 ease-out ${
+      className={`sticky top-0 z-50 flex items-center justify-between backdrop-blur-lg h-20 px-4 md:px-15 transition-all duration-300 ease-out ${
         mobileOpen
           ? "bg-white shadow-md shadow-black/10"
           : isScrolled
-            ? "bg-white shadow-md shadow-black/10"
-            : "bg-white/10 backdrop-blur-xl shadow-none"
+            ? "bg-white/10 shadow-md shadow-black/10"
+            : "shadow-none"
       }`}
     >
       <div className="relative h-30 w-30 md:h-32 md:w-32 shrink-0">
@@ -80,7 +80,7 @@ export default function Navbar() {
       </div>
 
       {/* MENU DESKTOP */}
-      <ul id="nav-links" className="hidden lg:flex gap-7">
+      <ul id="nav-links" className="hidden xl:flex gap-7">
         {navLinks.map((link) => {
           const isActive = pathname === link.href;
           return (
@@ -101,7 +101,7 @@ export default function Navbar() {
       </ul>
 
       {/* ACTIONS DESKTOP */}
-      <div className="hidden lg:flex items-center gap-4">
+      <div className="hidden xl:flex items-center gap-4">
         {userData ? (
           <Link
             href="/profile"
@@ -136,7 +136,7 @@ export default function Navbar() {
       <button
         type="button"
         onClick={() => setMobileOpen((prev) => !prev)}
-        className="lg:hidden p-2"
+        className="xl:hidden p-2"
         aria-label="Toggle menu"
       >
         {mobileOpen ? <RiCloseLine size={28} /> : <RiMenuLine size={28} />}
@@ -144,7 +144,7 @@ export default function Navbar() {
 
       {/* DROPDOWN MOBILE */}
       {mobileOpen && (
-        <div className="absolute top-20 left-0 right-0 lg:hidden bg-white shadow-lg border-t border-gray-100 flex flex-col p-4 gap-2">
+        <div className="absolute top-20 left-0 right-0 xl:hidden bg-white shadow-lg border-t border-gray-100 flex flex-col p-4 gap-2">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
