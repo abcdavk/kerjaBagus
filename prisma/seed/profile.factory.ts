@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 
 export function generateProfile() {
-  return {
+  return { 
     displayName: faker.person.fullName(),
 
     username:
@@ -9,6 +9,8 @@ export function generateProfile() {
       faker.number.int({ min: 1000, max: 9999 }),
 
     avatar: faker.image.avatar(),
+
+    skills: [faker.lorem.word(), faker.lorem.word(), faker.lorem.word()],
 
     headline: faker.person.jobTitle(),
 

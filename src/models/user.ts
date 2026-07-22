@@ -9,12 +9,19 @@ export interface UserProfile {
   avatar?: string | null;
 }
 
-export type GetUserResponse =
-  Prisma.UserGetPayload<{
-    include: {
-      profile: true;
-    };
-  }>;
+export type GetUserResponse = {
+  id: string;
+  email: string;
+  phone: string;
+  isClient: boolean;
+  isFreelancer: boolean;
+  isAdmin: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  profile: {
+    id: string;
+  }
+}
 
 export interface UpdateUserRequest {
   email?: string;

@@ -1,9 +1,10 @@
+import { PROVINCES } from "@/lib/constant";
 import { faker } from "@faker-js/faker";
 
 export function generateAddress() {
   return {
     country: "Indonesia",
-    province: faker.location.state(),
+    province: PROVINCES[Math.floor(Math.random() * PROVINCES.length)],
     city: faker.location.city(),
     district: faker.location.county(),
     village: faker.location.street(),

@@ -1,10 +1,16 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { RiEditLine } from "@remixicon/react";
+import { RiEditLine, RiMailFill, RiMailLine, RiMapPin2Line, RiMapPinFill } from "@remixicon/react";
 import { useRouter } from "next/navigation";
 import { logout, me } from "@/services/auth.service";
 import { RiArrowLeftLine } from "@remixicon/react";
+import { getUser, updateUser } from "@/services/users.service";
+import EditableCard from "../components/editableCard";
+import { getProfile, updateProfile } from "@/services/profiles.service";
+import { GetUserResponse } from "@/models/user";
+import { GetProfileResponse } from "@/models/profile";
+import { Loading } from "../components/loading";
 import BackButton from "../components/backButton";
 
 export default function ProfilePage() {
@@ -12,28 +18,24 @@ export default function ProfilePage() {
 
   const [loading, setLoading] = useState(true);
 
-  const [userData, setUserData] = useState({
-    name: "",
-    email: "",
-    title: "Belum diatur",
-    location: "Belum diatur",
-    skills: [] as string[],
-  });
+  const [userData, setUserData] = useState<GetUserResponse | null>(null);
+  const [profileData, setProfileData] = useState<GetProfileResponse | null>(null);
 
   useEffect(() => {
     async function loadUser() {
       try {
-        const { user } = await me();
-
-        setUserData((prev) => ({
-          ...prev,
-          name: user.email,
-          email: user.email,
-        }));
+        const data = await me();
+        const user = await getUser(data.user.id);
+        const profile = await getProfile(user.profile.id);
+        setUserData(user);
+        setProfileData(profile);
       } catch (error) {
         console.error(error);
 
         router.replace("/login");
+
+        setUserData(null);
+        setProfileData(null);
       } finally {
         setLoading(false);
       }
@@ -62,10 +64,27 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        Memuat profil...
-      </div>
+      // <div className="min-h-screen flex items-center justify-center">
+      //   Memuat profil...
+      // </div>
+      <Loading />
     );
+  }
+
+  const handleOnChangeBio = async (value: string) => {
+    if (!profileData) return;
+    if (profileData.bio === value) return;
+    await updateProfile(profileData.id, {
+      bio: value
+    });
+  }
+
+  const handleOnChangeHeadline = async (value: string) => {
+    if (!profileData) return;
+    if (profileData.headline === value) return;
+    await updateProfile(profileData.id, {
+      headline: value
+    });
   }
 
   return (
@@ -78,30 +97,45 @@ export default function ProfilePage() {
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex items-center justify-between">
           <div className="flex items-center gap-5">
             <div className="w-20 h-20 rounded-full bg-[#D8E6D3] text-[#386641] flex items-center justify-center font-bold text-2xl border border-[#386641]/20">
-              {getInitials(userData.name)}
+              {getInitials(profileData?.displayName ?? "")}
             </div>
 
             <div>
-              <h1 className="text-2xl font-bold text-gray-800">
-                {userData.name || "Nama Pengguna"}
-              </h1>
+              
+              <section className="flex gap-2 items-end">
+                <h1 className="text-2xl font-bold text-gray-800">
+                  {profileData?.displayName || "Nama Pengguna"}
+                </h1>
+                <span className="text-lg text-gray-500">@{profileData?.username ?? ""}</span>
+              </section>
 
-              <p className="text-md text-gray-500">{userData.title}</p>
 
-              <p className="text-sm text-gray-400 mt-1">
-                📍 {userData.location} • ✉️ {userData.email}
+              <EditableCard initialBody={profileData?.headline ?? ""} widthType="wrap" maxLength={60} onChange={handleOnChangeHeadline} />
+              {/* <p className="text-md text-gray-500"></p> */}
+
+              <p className="text-gray-400 mt-1 flex gap-2 font-light">
+                <span className="flex gap-1 items-center"><RiMapPin2Line className="w-4" /> {profileData?.address?.province ?? ""}</span>
+                <span className="flex gap-1 items-center"><RiMailLine className="w-4" /> {userData?.email ?? ""}</span>
               </p>
             </div>
           </div>
 
-          <button
-            onClick={() => alert("Fitur Edit Profil bisa kamu buka di sini!")}
+          {/* <button
+            onClick={() => router.push("/profile/edit")}
             className="flex items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition cursor-pointer"
           >
             <RiEditLine size={16} />
             Edit Profil
-          </button>
+          </button> */}
         </div>
+
+        <div className="rounded-xl border border-gray-200 p-4 bg-white shadow-sm">
+          <h3 className="text-lg font-bold text-gray-800 mb-3">
+            Tentang Saya
+          </h3>
+          <EditableCard initialBody={profileData?.bio ?? ""} maxLength={500} onChange={handleOnChangeBio} />
+        </div>
+
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
@@ -109,9 +143,9 @@ export default function ProfilePage() {
               Keahlian (Skills)
             </h3>
 
-            {userData.skills.length > 0 ? (
+            {profileData && profileData?.skills?.length > 0 ? (
               <div className="flex flex-wrap gap-2">
-                {userData.skills.map((skill, index) => (
+                {profileData.skills.map((skill, index) => (
                   <span
                     key={index}
                     className="bg-gray-100 text-xs px-3 py-1 rounded-full text-gray-600"

@@ -13,16 +13,19 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(cuid())
-  email        String   @unique
-  phone        String   @unique
-  passwordHash String
-  isClient     Boolean  @default(false)
-  isFreelancer Boolean  @default(true)
-  isAdmin      Boolean  @default(false)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  profile      Profile?
+  id             String   @id @default(cuid())
+  email          String   @unique
+  phone          String   @unique
+  passwordHash   String
+
+  isClient       Boolean @default(false)
+  isFreelancer   Boolean @default(true)
+  isAdmin        Boolean @default(false)
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  profile        Profile?
 }
 
 model Address {
@@ -46,6 +49,7 @@ model Profile {
   avatar      String?
   headline    String
   bio         String?
+  skills      String[] @default([])
   website     String?
   github      String?
   linkedin    String?

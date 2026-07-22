@@ -14,22 +14,26 @@ export async function seedUsers(prisma: PrismaClient, amount = 20) {
       data: userData,
     });
 
-    await prisma.profile.create({
-      data: {
-        ...generateProfile(),
-
-        user: {
-          connect: {
-            id: user.id,
+    try {
+      await prisma.profile.create({
+        data: {
+          ...generateProfile(),
+  
+          user: {
+            connect: {
+              id: user.id,
+            },
+          },
+  
+          address: {
+            connect: {
+              id: address.id,
+            },
           },
         },
-
-        address: {
-          connect: {
-            id: address.id,
-          },
-        },
-      },
-    });
+      });
+    } catch (err) {
+      console.log(err)
+    }
   }
 }
