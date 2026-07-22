@@ -110,7 +110,7 @@ export default function Home() {
 
                 <button
                   type="submit"
-                  className="shrink-0 rounded-md bg-[#F4991A] px-6 py-2.5 md:py-2 text-sm font-medium text-white hover:bg-[#F4991A]/80 w-full md:w-auto"
+                  className="shrink-0 rounded-md bg-[#F4991A] px-6 py-2.5 md:py-2 mr-4 text-sm font-medium text-white hover:bg-[#F4991A]/80 w-full md:w-auto"
                 >
                   Cari
                 </button>
