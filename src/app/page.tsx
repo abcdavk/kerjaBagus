@@ -9,9 +9,15 @@ import { getCompanyInitials } from "./utils/company";
 import { formatSalaryRange } from "./utils/salary";
 import { JobListItem } from "@/models/job";
 import { faker } from "@faker-js/faker";
-import { RiSearchLine, RiArrowDropDownFill } from "@remixicon/react";
+import {
+  RiSearchLine,
+  RiArrowDropDownFill,
+  RiArrowRightUpLine,
+  RiAddLine,
+} from "@remixicon/react";
 import { PROVINCES } from "@/lib/constant";
 import CategoryGrid from "@/app/components/CategoryGrid";
+import Link from "next/link";
 
 export default function Home() {
   const router = useRouter();
@@ -168,10 +174,40 @@ export default function Home() {
 
       {/* CTA SECTION */}
       <section className="cta-container bg-[#F4991A] flex flex-col items-center">
-        <div className="cta-content mb-10 bg-[#F9F5F0] w-full p-5 rounded-lg shadow-lg">
-          <h1 className="text-4xl max-w-4xl mx-auto font-bold text-[#344F1F] mb-8 text-center">
-            Butuh pekerjaan? Atau mau pasang lowongan?
+        <div className="cta-content mb-10 bg-[#F9F5F0] w-full px-5 py-8 rounded-lg shadow-lg">
+          <h1 className="text-3xl md:text-5xl max-w-2xl mx-auto font-bold text-[#344F1F] mb-4 text-center">
+            Siap Tambah Penghasilan{" "}
+            <span className="text-[#F4991A]">atau Butuh Bantuan Usaha?</span>
           </h1>
+
+          <p className="text-lg md:text-2xl tracking-wide mx-auto font-medium text-[#091413] text-center">
+            Pilih peranmu dan mulai terhubung hanya dalam hitungan menit
+          </p>
+
+          {/* CTA BUTTON */}
+          <div className="flex justify-center mb-5 items-center mt-8 gap-6">
+            {/* CEK LOWONGAN */}
+            <Link
+              href="/jobs"
+              className="bg-[#344F1F] hover:bg-[#466B29] text-white flex items-center py-3 px-8 text-2xl font-medium rounded-full text-center transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-103 cursor-pointer"
+            >
+              Cek Lowongan
+              <div className="rounded-full w-10 h-10 p-2 bg-white text-black flex items-center justify-center ml-4">
+                <RiArrowRightUpLine className="w-5 h-5" />
+              </div>
+            </Link>
+
+            {/* POST PEKERJAAN */}
+            <Link
+              href="/jobs/create"
+              className="bg-[#F4991A] hover:bg-[#C46D00] text-white flex items-center py-3 px-8 text-2xl font-medium rounded-full text-center transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-103 cursor-pointer"
+            >
+              Post Pekerjaan
+              <div className="rounded-full w-10 h-10 p-2 bg-white text-black flex items-center justify-center ml-4">
+                <RiAddLine className="w-5 h-5" />
+              </div>
+            </Link>
+          </div>
         </div>
       </section>
     </main>
