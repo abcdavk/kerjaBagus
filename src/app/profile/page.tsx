@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { RiEditLine } from "@remixicon/react";
+import { RiEditLine, RiMailFill, RiMapPinFill } from "@remixicon/react";
 import { useRouter } from "next/navigation";
 import { logout, me } from "@/services/auth.service";
 import { RiArrowLeftLine } from "@remixicon/react";
+import { getUser } from "@/services/user.service";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -23,11 +24,15 @@ export default function ProfilePage() {
     async function loadUser() {
       try {
         const { user } = await me();
+        const { profile } = await getUser(user.id);
+
+        console.log("skills: ", profile?.skills)
 
         setUserData((prev) => ({
           ...prev,
-          name: user.email,
+          name: profile?.displayName ?? userData.name,
           email: user.email,
+          skills: profile?.skills ?? userData.skills
         }));
       } catch (error) {
         console.error(error);
@@ -92,8 +97,9 @@ export default function ProfilePage() {
 
               <p className="text-md text-gray-500">{userData.title}</p>
 
-              <p className="text-sm text-gray-400 mt-1">
-                📍 {userData.location} • ✉️ {userData.email}
+              <p className="text-sm text-gray-400 mt-1 flex gap-4">
+                <span className="flex gap-2 items-center"><RiMapPinFill /> {userData.location}</span>
+                <span className="flex gap-2 items-center"><RiMailFill /> {userData.email}</span>
               </p>
             </div>
           </div>

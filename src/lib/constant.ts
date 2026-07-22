@@ -1,5 +1,4 @@
 export const PROVINCES = [
-  "Ohio",
   "Aceh",
   "Sumatera Utara",
   "Sumatera Barat",

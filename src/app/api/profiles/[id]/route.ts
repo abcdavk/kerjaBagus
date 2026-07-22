@@ -59,6 +59,8 @@ export async function PATCH(
         headline: body.headline,
         bio: body.bio,
 
+        skills: body.skills,
+
         website: body.website,
         github: body.github,
         linkedin: body.linkedin,
