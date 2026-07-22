@@ -166,11 +166,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* PANDUAN SECTION */}
+      {/* CTA SECTION */}
       <section className="cta-container bg-[#F4991A] flex flex-col items-center">
         <div className="cta-content mb-10 bg-[#F9F5F0] w-full p-5 rounded-lg shadow-lg">
           <h1 className="text-4xl max-w-4xl mx-auto font-bold text-[#344F1F] mb-8 text-center">
-            How it works?
+            Butuh pekerjaan? Atau mau pasang lowongan?
           </h1>
         </div>
       </section>
