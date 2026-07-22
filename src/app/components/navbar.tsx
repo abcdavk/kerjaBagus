@@ -11,12 +11,16 @@ import { getUser } from "@/services/users.service";
 import { GetUserResponse } from "@/models/user";
 import { GetProfileResponse } from "@/models/profile";
 import { getProfile } from "@/services/profiles.service";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const [userData, setUserData] = useState<GetUserResponse | null>(null);
-  const [profileData, setProfileData] = useState<GetProfileResponse | null>(null);
+  const [profileData, setProfileData] = useState<GetProfileResponse | null>(
+    null,
+  );
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     async function loadUser() {
@@ -48,14 +52,20 @@ export default function Navbar() {
   const navLinks = [
     { href: "/", label: "Beranda" },
     { href: "/jobs", label: "Lowongan" },
-    { href: "/", label: "Tersimpan" },
+    { href: "/saved", label: "Tersimpan" },
     { href: "/cv-generator", label: "CV Generator" },
     { href: "#", label: "Panduan" },
   ];
 
   return (
     <nav
-      className={`sticky top-0 z-50 flex items-center justify-between h-20 px-4 md:px-15 backdrop-blur-lg bg-white/20 transition-shadow duration-300 ${isScrolled ? "shadow-md shadow-black/10" : "shadow-none" }`}
+      className={`sticky top-0 z-50 flex items-center justify-between backdrop-blur-lg h-20 px-4 md:px-15 transition-all duration-300 ease-out ${
+        mobileOpen
+          ? "bg-white shadow-md shadow-black/10"
+          : isScrolled
+            ? "bg-white/10 shadow-md shadow-black/10"
+            : "shadow-none"
+      }`}
     >
       <div className="relative h-30 w-30 md:h-32 md:w-32 shrink-0">
         <Link href="/">
@@ -70,18 +80,28 @@ export default function Navbar() {
       </div>
 
       {/* MENU DESKTOP */}
-      <ul id="nav-links" className="hidden lg:flex gap-7">
-        {navLinks.map((link) => (
-          <li key={link.label}>
-            <Link href={link.href} className="hover:font-semibold text-xl">
-              {link.label}
-            </Link>
-          </li>
-        ))}
+      <ul id="nav-links" className="hidden xl:flex gap-7">
+        {navLinks.map((link) => {
+          const isActive = pathname === link.href;
+          return (
+            <li key={link.label}>
+              <Link
+                href={link.href}
+                className={`relative text-xl pb-1 transition-colors ${
+                  isActive
+                    ? "text-[#F4991A] after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:w-full after:h-0.5 after:bg-[#F4991A]"
+                    : "text-inherit"
+                }`}
+              >
+                {link.label}
+              </Link>
+            </li>
+          );
+        })}
       </ul>
 
       {/* ACTIONS DESKTOP */}
-      <div className="hidden lg:flex items-center gap-4">
+      <div className="hidden xl:flex items-center gap-4">
         {userData ? (
           <Link
             href="/profile"
@@ -90,7 +110,7 @@ export default function Navbar() {
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#E2D2B4] text-xs font-bold text-[#386641]">
               {getUsernameInitials(profileData?.displayName ?? "")}
             </div>
-            <span className="text-sm font-semibold text-[#386641] max-w-[120px] truncate">
+            <span className="text-sm font-semibold text-[#386641] max-w-30 truncate">
               {profileData?.displayName ?? ""}
             </span>
           </Link>
@@ -116,7 +136,7 @@ export default function Navbar() {
       <button
         type="button"
         onClick={() => setMobileOpen((prev) => !prev)}
-        className="lg:hidden p-2"
+        className="xl:hidden p-2"
         aria-label="Toggle menu"
       >
         {mobileOpen ? <RiCloseLine size={28} /> : <RiMenuLine size={28} />}
@@ -124,18 +144,24 @@ export default function Navbar() {
 
       {/* DROPDOWN MOBILE */}
       {mobileOpen && (
-        <div className="absolute top-20 left-0 right-0 lg:hidden bg-white shadow-lg border-t border-gray-100 flex flex-col p-4 gap-2">
-          {navLinks.map((link) => (
-            <Link
-              key={link.label}
-              href={link.href}
-              onClick={() => setMobileOpen(false)}
-              className="py-2 px-2 text-base hover:bg-gray-50 rounded"
-            >
-              {link.label}
-            </Link>
-          ))}
-
+        <div className="absolute top-20 left-0 right-0 xl:hidden bg-white shadow-lg border-t border-gray-100 flex flex-col p-4 gap-2">
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.label}
+                href={link.href}
+                onClick={() => setMobileOpen(false)}
+                className={`py-2 px-2 text-base rounded ${
+                  isActive
+                    ? "bg-[#FBF6F0] text-[#F4991A] font-semibold border-[#F4991A]"
+                    : "hover:bg-gray-50"
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
           <div className="border-t border-gray-100 mt-2 pt-3 flex flex-col gap-2">
             {userData ? (
               <Link
