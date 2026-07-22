@@ -11,6 +11,7 @@ import { JobListItem } from "@/models/job";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { RiArrowLeftLine } from "@remixicon/react";
+import BackButton from "../components/backButton";
 
 export default function JobsPage() {
   const searchParams = useSearchParams();
@@ -62,14 +63,7 @@ export default function JobsPage() {
   return (
     <div className="mx-auto py-10 flex-row w-max">
       {/* BUTTON BACK */}
-      <button
-        type="button"
-        onClick={() => router.back()}
-        className="flex items-center font-semibold text-lg gap-1 hover:underline cursor-pointer"
-      >
-        <RiArrowLeftLine size={20} />
-        Kembali
-      </button>
+      <BackButton />
 
       {/* CONTENT */}
       <div className="mb-8 text-center">

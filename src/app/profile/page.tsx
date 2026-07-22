@@ -11,7 +11,7 @@ import { getProfile, updateProfile } from "@/services/profiles.service";
 import { GetUserResponse } from "@/models/user";
 import { GetProfileResponse } from "@/models/profile";
 import { Loading } from "../components/loading";
-import { profile } from "console";
+import BackButton from "../components/backButton";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -91,14 +91,9 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-[#FAF8F0] px-6 py-10">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* BUTTON BACK */}
-        <button
-          type="button"
-          onClick={() => router.back()}
-          className="flex items-center font-semibold text-lg gap-1 hover:underline cursor-pointer"
-        >
-          <RiArrowLeftLine size={20} />
-          Kembali
-        </button>
+        <BackButton />
+
+        {/* CONTENT */}
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex items-center justify-between">
           <div className="flex items-center gap-5">
             <div className="w-20 h-20 rounded-full bg-[#D8E6D3] text-[#386641] flex items-center justify-center font-bold text-2xl border border-[#386641]/20">
