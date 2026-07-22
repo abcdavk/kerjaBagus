@@ -11,6 +11,7 @@ import { JobListItem } from "@/models/job";
 import { faker } from "@faker-js/faker";
 import { RiSearchLine, RiArrowDropDownFill } from "@remixicon/react";
 import { PROVINCES } from "@/lib/constant";
+import CategoryGrid from "@/app/components/CategoryGrid";
 
 export default function Home() {
   const router = useRouter();
@@ -146,35 +147,26 @@ export default function Home() {
         </div>
       </section>
 
-      {/* JOB SECTION */}
-      <section className="cta-container flex flex-col">
-        <div className="cta-content mt-20">
-          <h2 className="text-3xl font-semibold mb-8 text-center">
-            Lowongan Terbaru
+      {/* CATEGORY SECTION */}
+      <section className="cta-container flex flex-col items-center">
+        <div className="cta-content mb-10">
+          <div className="flex w-fit mx-auto py-2 px-6 border border-[#F6D39E] bg-[#FBF6F0] text-black/80 items-center rounded-xl mb-3">
+            <h1 className="font-normal text-sm tracking-wide">
+              Kategori Pekerjaan
+            </h1>
+          </div>
+
+          <h2 className="text-4xl max-w-4xl mx-auto font-bold mb-8 text-center">
+            Ada Banyak Pilihan Kerjaan yang Pas Buat Keahlianmu
           </h2>
 
-          {/* JOB CARD */}
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3 flex-wrap">
-            {featuredJobs.map((job) => (
-              <JobCard
-                key={job.id}
-                id={job.id}
-                logoText={getCompanyInitials(job.company)}
-                logoColor={faker.color.rgb()}
-                title={job.title}
-                company={job.company}
-                province={
-                  job.address?.province
-                    ? `${job.address.city}, ${job.address.province}`
-                    : job.address?.city || "Lokasi tidak tersedia"
-                }
-                tags={job.tags}
-                salaryRange={formatSalaryRange(job.budgetMin, job.budgetMax)}
-                verified={job.isVerified}
-              />
-            ))}
-          </div>
+          <CategoryGrid />
         </div>
+      </section>
+
+      {/* PANDUAN SECTION */}
+      <section className="cta-container bg-[#F4991A] flex flex-col items-center">
+        <div className="cta-content mb-10"></div>
       </section>
     </main>
   );

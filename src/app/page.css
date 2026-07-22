@@ -30,13 +30,10 @@
 .cta-container {
   position: relative;
   width: 100%;
-  min-height: 100vh;
+  min-height: auto;
 
-  display: flex;
-  justify-content: center;
-
-  align-items: center;
-
+  padding-top: 4rem;
+  padding-bottom: 4rem;
   padding-left: 1.25rem;
   padding-right: 1.25rem;
 
@@ -45,6 +42,6 @@
 
 .cta-content {
   position: relative;
-  width: 100%;
+
   max-width: 1200px;
 }
