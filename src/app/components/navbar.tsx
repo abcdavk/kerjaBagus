@@ -14,7 +14,9 @@ import { getProfile } from "@/services/profiles.service";
 
 export default function Navbar() {
   const [userData, setUserData] = useState<GetUserResponse | null>(null);
-  const [profileData, setProfileData] = useState<GetProfileResponse | null>(null);
+  const [profileData, setProfileData] = useState<GetProfileResponse | null>(
+    null,
+  );
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -55,9 +57,9 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`sticky top-0 z-50 flex items-center justify-between h-20 px-4 md:px-15 backdrop-blur-lg bg-white/20 transition-shadow duration-300 ${
+      className={`sticky top-0 z-50 flex items-center justify-between h-20 px-4 md:px-15 backdrop-blur-lg transition-all duration-300 ease-out ${
         isScrolled ? "shadow-md shadow-black/10" : "shadow-none"
-      }`}
+      } ${mobileOpen ? "bg-white" : "bg-white/20"}`}
     >
       <div className="relative h-30 w-30 md:h-32 md:w-32 shrink-0">
         <Link href="/">
