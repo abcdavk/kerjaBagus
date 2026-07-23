@@ -61,9 +61,11 @@ export default function JobsPage() {
   }
 
   return (
-    <div className="mx-auto py-10 flex-row w-max">
+    <div className="mx-auto w-full max-w-7xl px-4 md:px-6 py-10">
       {/* BUTTON BACK */}
-      <BackButton />
+      <div className="mb-6">
+        <BackButton />
+      </div>
 
       {/* CONTENT */}
       <div className="mb-8 text-center">
@@ -76,7 +78,7 @@ export default function JobsPage() {
       </div>
 
       {/* JOB CARD */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3 flex-wrap">
+      <div className="grid grid-cols-1 gap-6 mb-7 md:grid-cols-2 xl:grid-cols-3">
         {jobs.map((job) => (
           <JobCard
             key={job.id}

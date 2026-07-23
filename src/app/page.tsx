@@ -94,20 +94,20 @@ export default function Home() {
                     type="search"
                     value={keyword}
                     onChange={(e) => setKeyword(e.target.value)}
-                    placeholder="UI/UX Designer, Content Writer..."
-                    className="bg-transparent ml-3 md:ml-4 text-sm font-medium outline-none w-full placeholder:text-gray-500"
+                    placeholder="Cari kategori atau nama pekerjaan..."
+                    className="bg-transparent ml-3 md:ml-4 text-sm md:text-lg font-medium outline-none w-full placeholder:text-gray-500"
                   />
                 </div>
 
-                <div className="hidden md:block h-8 w-px bg-gray-200 mx-4 shrink-0" />
                 <div className="block md:hidden h-px w-full bg-gray-200" />
 
                 {/* FILTER WILAYAH */}
-                <div className="flex items-center flex-1 min-w-0 px-2 md:px-0">
+                <div className="flex items-center shrink-0 px-2 md:px-0 md:ml-auto md:mr-20">
+                  <div className="hidden md:block h-8 w-px bg-gray-200 mr-4 shrink-0" />
                   <button
                     type="button"
                     onClick={() => setOpen((prev) => !prev)}
-                    className="bg-transparent flex items-center text-sm md:ml-3 font-medium outline-none cursor-pointer w-full text-left text-gray-500"
+                    className="bg-transparent flex items-center text-sm md:text-lg font-medium outline-none cursor-pointer text-left text-gray-500"
                   >
                     <RiArrowDropDownFill className="mr-3 shrink-0" />
                     <span className="truncate">{wilayah || "Lokasi"}</span>
@@ -174,7 +174,7 @@ export default function Home() {
 
       {/* CALL OF ACTION SECTION */}
       <section className="cta-container bg-[#F4991A] flex flex-col items-center">
-        <div className="cta-content mb-10 bg-[#F9F5F0] w-full px-5 py-8 rounded-lg shadow-lg">
+        <div className="cta-content mb-10 bg-[#F9F5F0] w-full px-9 py-8 rounded-lg shadow-lg">
           <h1 className="text-3xl md:text-5xl max-w-2xl mx-auto font-bold text-[#344F1F] mb-4 text-center">
             Siap Tambah Penghasilan{" "}
             <span className="text-[#F4991A]">atau Butuh Bantuan Usaha?</span>
