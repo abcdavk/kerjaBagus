@@ -54,7 +54,7 @@ export default function Navbar() {
     { href: "/jobs", label: "Lowongan" },
     { href: "/saved", label: "Tersimpan" },
     { href: "/cv-generator", label: "CV Generator" },
-    { href: "#", label: "Panduan" },
+    { href: "/help", label: "Panduan" },
   ];
 
   return (
