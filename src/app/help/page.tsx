@@ -11,7 +11,7 @@ const faqs: Faqs[] = [
   {
     question: "Syarat & Ketentuan Penggunaan",
     answer: (
-      <div className="space-y-4 text-slate-700 text-lg leading-relaxed">
+      <div className="space-y-4 text-slate-700 text-md md:text-lg leading-relaxed">
         <div>
           <h1 className="font-bold text-slate-900 mb-2 flex items-center gap-2">
             A. Bagi Pekerja / Freelancer
@@ -67,7 +67,7 @@ const faqs: Faqs[] = [
   {
     question: "Kebijakan Privasi (Keamanan Data)",
     answer: (
-      <div className="space-y-3 text-slate-700 text-lg leading-relaxed">
+      <div className="space-y-3 text-slate-700 text-md md:text-lg leading-relaxed">
         <p>Keamanan data Anda adalah prioritas utama di KerjaBagus</p>
         <ul className="list-disc pl-5 space-y-2">
           <li>
@@ -95,10 +95,10 @@ const faqs: Faqs[] = [
   {
     question: "FAQ & Bantuan Umum",
     answer: (
-      <div className="space-y-5 text-slate-700 text-lg leading-relaxed">
+      <div className="space-y-5 text-slate-700 text-md md:text-lg leading-relaxed">
         {/* PEKERJA */}
         <div>
-          <h4 className="font-bold text-emerald-800 text-xl mb-2">
+          <h4 className="font-bold text-[#344F1F] text-xl mb-2">
             Bantuan untuk Pekerja / Freelancer
           </h4>
           <div className="space-y-3">
@@ -140,7 +140,7 @@ const faqs: Faqs[] = [
 
         {/* CLIENT / UMKM */}
         <div>
-          <h4 className="font-bold text-amber-800 text-xl mb-2">
+          <h4 className="font-bold text-[#F4991A] text-xl mb-2">
             Bantuan untuk UMKM / Pemilik Usaha
           </h4>
           <div className="space-y-3">
@@ -149,7 +149,7 @@ const faqs: Faqs[] = [
                 Bagaimana cara memasang lowongan proyek?
               </p>
               <p className="text-slate-600">
-                Klik tombol <strong>&quot;Pasang Lowongan&quot;</strong> di
+                Klik tombol <strong>&quot;Post Pekerjaan&quot;</strong> di
                 halaman utama, isi judul kebutuhan kerja, kriteria singkat,
                 lokasi, dan budget/upah yang ditawarkan.
               </p>
@@ -169,10 +169,10 @@ const faqs: Faqs[] = [
 
         {/* KTIPS */}
         <div className="p-4 bg-red-50 border border-red-200 rounded-xl">
-          <h4 className="font-bold text-red-800 text-xl mb-1 flex items-center gap-1.5">
+          <h4 className="font-bold text-red-800 text-lg md:text-xl mb-1 flex items-center gap-1.5">
             <span>Tips Transaksi & Keamanan Penting:</span>
           </h4>
-          <ul className="list-disc pl-5 space-y-1 text-lg text-red-700 mt-2">
+          <ul className="list-disc pl-5 space-y-1 text-md md:text-lg text-red-700 mt-2">
             <li>
               <strong>
                 Pekerja TIDAK BOLEH diminta bayar uang muka/seragam/administrasi
@@ -193,7 +193,7 @@ const faqs: Faqs[] = [
   {
     question: "Kontak Bantuan Langsung",
     answer: (
-      <div className="space-y-3 text-slate-700 text-lg leading-relaxed">
+      <div className="space-y-3 text-slate-700 text-md md:text-lg leading-relaxed">
         <p>
           Butuh bantuan lebih lanjut atau ingin melaporkan indikasi penipuan?
           Tim KerjaBagus siap membantu Anda:
@@ -216,7 +216,7 @@ const faqs: Faqs[] = [
 
 export default function Help() {
   return (
-    <div className="w-full py-10 px-4">
+    <div className="w-full py-10 px-6">
       <h1 className="text-3xl font-bold text-center mb-8">
         Informasi & Panduan
       </h1>
