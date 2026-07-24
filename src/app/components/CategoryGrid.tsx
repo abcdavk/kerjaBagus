@@ -55,21 +55,21 @@ const categories: Category[] = [
 
 function CategoryCard({ title, icon: Icon, description }: Category) {
   return (
-    <div className="bg-gray-50 rounded-2xl p-6 h-70 gap-2 shadow-sm border border-gray-100 transition-transform transform hover:-translate-y-1 cursor-pointer flex flex-col items-center justify-center text-center">
-      <div className="w-17 h-17 flex border border-[#F6D39E] items-center justify-center rounded-lg bg-white">
-        <Icon size={22} className="text-[#344F1F]" />
+    <div className="bg-gray-50 rounded-2xl py-4 px-7 md:py-8 md:px-6 min-h-[220px] gap-2 shadow-sm border border-gray-100 transition-transform transform hover:-translate-y-1 cursor-pointer flex flex-col items-center justify-center text-center">
+      <div className="w-14 h-14 md:w-16 md:h-16 flex border border-[#F6D39E] items-center justify-center rounded-lg bg-white">
+        <Icon size={20} className="text-[#344F1F]" />
       </div>
 
-      <h3 className="text-black font-semibold text-2xl">{title}</h3>
+      <h3 className="text-black font-semibold text-xl md:text-2xl">{title}</h3>
 
-      <p className="text-lg text-gray-500">{description}</p>
+      <p className="text-md md:text-lg text-gray-500">{description}</p>
     </div>
   );
 }
 
 export default function CategoryGrid() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {categories.map((cat) => (
         <CategoryCard key={cat.title} {...cat} />
       ))}

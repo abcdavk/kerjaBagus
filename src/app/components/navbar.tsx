@@ -54,7 +54,7 @@ export default function Navbar() {
     { href: "/jobs", label: "Lowongan" },
     { href: "/saved", label: "Tersimpan" },
     { href: "/cv-generator", label: "CV Generator" },
-    { href: "#", label: "Panduan" },
+    { href: "/help", label: "Panduan" },
   ];
 
   return (
@@ -162,7 +162,7 @@ export default function Navbar() {
               </Link>
             );
           })}
-          <div className="border-t border-gray-100 mt-2 pt-3 flex flex-col gap-2">
+          <div className="border-t border-gray-100 mt-2 pt-3 flex flex-col gap-5">
             {userData ? (
               <Link
                 href="/profile"

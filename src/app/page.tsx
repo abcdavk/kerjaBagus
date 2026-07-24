@@ -94,20 +94,20 @@ export default function Home() {
                     type="search"
                     value={keyword}
                     onChange={(e) => setKeyword(e.target.value)}
-                    placeholder="UI/UX Designer, Content Writer..."
-                    className="bg-transparent ml-3 md:ml-4 text-sm font-medium outline-none w-full placeholder:text-gray-500"
+                    placeholder="Cari kategori atau nama pekerjaan..."
+                    className="bg-transparent ml-3 md:ml-4 text-sm md:text-lg font-medium outline-none w-full placeholder:text-gray-500"
                   />
                 </div>
 
-                <div className="hidden md:block h-8 w-px bg-gray-200 mx-4 shrink-0" />
                 <div className="block md:hidden h-px w-full bg-gray-200" />
 
                 {/* FILTER WILAYAH */}
-                <div className="flex items-center flex-1 min-w-0 px-2 md:px-0">
+                <div className="flex items-center shrink-0 px-2 md:px-0 md:ml-auto md:mr-20">
+                  <div className="hidden md:block h-8 w-px bg-gray-200 mr-4 shrink-0" />
                   <button
                     type="button"
                     onClick={() => setOpen((prev) => !prev)}
-                    className="bg-transparent flex items-center text-sm md:ml-3 font-medium outline-none cursor-pointer w-full text-left text-gray-500"
+                    className="bg-transparent flex items-center text-sm md:text-lg font-medium outline-none cursor-pointer text-left text-gray-500"
                   >
                     <RiArrowDropDownFill className="mr-3 shrink-0" />
                     <span className="truncate">{wilayah || "Lokasi"}</span>
@@ -172,9 +172,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA SECTION */}
+      {/* CALL OF ACTION SECTION */}
       <section className="cta-container bg-[#F4991A] flex flex-col items-center">
-        <div className="cta-content mb-10 bg-[#F9F5F0] w-full px-5 py-8 rounded-lg shadow-lg">
+        <div className="cta-content mb-10 bg-[#F9F5F0] w-full px-9 py-8 rounded-lg shadow-lg">
           <h1 className="text-3xl md:text-5xl max-w-2xl mx-auto font-bold text-[#344F1F] mb-4 text-center">
             Siap Tambah Penghasilan{" "}
             <span className="text-[#F4991A]">atau Butuh Bantuan Usaha?</span>
@@ -184,15 +184,15 @@ export default function Home() {
             Pilih peranmu dan mulai terhubung hanya dalam hitungan menit
           </p>
 
-          {/* CTA BUTTON */}
-          <div className="flex justify-center mb-5 items-center mt-8 gap-6">
+          {/* ACTION BUTTON */}
+          <div className="flex flex-col md:flex-row justify-center items-center mb-5 mt-8 gap-4 w-full">
             {/* CEK LOWONGAN */}
             <Link
               href="/jobs"
-              className="bg-[#344F1F] hover:bg-[#466B29] text-white flex items-center py-3 px-8 text-2xl font-medium rounded-full text-center transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-103 cursor-pointer"
+              className="w-full md:w-auto max-w-md bg-[#344F1F] hover:bg-[#466B29] text-white flex items-center justify-center gap-3 py-3 md:py-3 px-5 md:px-8 text-xl md:text-2xl font-medium rounded-full transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 cursor-pointer"
             >
               Cek Lowongan
-              <div className="rounded-full w-10 h-10 p-2 bg-white text-black flex items-center justify-center ml-4">
+              <div className="rounded-full w-10 h-10 p-2 bg-white text-black flex items-center justify-center">
                 <RiArrowRightUpLine className="w-5 h-5" />
               </div>
             </Link>
@@ -200,10 +200,10 @@ export default function Home() {
             {/* POST PEKERJAAN */}
             <Link
               href="/jobs/create"
-              className="bg-[#F4991A] hover:bg-[#C46D00] text-white flex items-center py-3 px-8 text-2xl font-medium rounded-full text-center transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-103 cursor-pointer"
+              className="w-full md:w-auto max-w-md bg-[#F4991A] hover:bg-[#C46D00] text-white flex items-center justify-center gap-3 py-3 md:py-3 px-5 md:px-8 text-xl md:text-2xl font-medium rounded-full transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 cursor-pointer"
             >
               Post Pekerjaan
-              <div className="rounded-full w-10 h-10 p-2 bg-white text-black flex items-center justify-center ml-4">
+              <div className="rounded-full w-10 h-10 p-2 bg-white text-black flex items-center justify-center">
                 <RiAddLine className="w-5 h-5" />
               </div>
             </Link>
