@@ -42,8 +42,9 @@ export async function PATCH(
   { params }: Context
 ) {
   const { id } = await params;
-
   const body = await request.json();
+
+  const address = body.address;
 
   try {
     const profile = await prisma.profile.update({
@@ -70,6 +71,33 @@ export async function PATCH(
         currency: body.currency,
 
         isAvailable: body.isAvailable,
+
+        ...(address && {
+          address: {
+            upsert: {
+              update: {
+                country: address.country,
+                province: address.province,
+                city: address.city,
+                district: address.district,
+                village: address.village,
+                postalCode: address.postalCode,
+                latitude: address.latitude,
+                longitude: address.longitude,
+              },
+              create: {
+                country: address.country ?? "Indonesia",
+                province: address.province ?? "",
+                city: address.city ?? "",
+                district: address.district,
+                village: address.village,
+                postalCode: address.postalCode,
+                latitude: address.latitude,
+                longitude: address.longitude,
+              },
+            },
+          },
+        }),
       },
 
       include: {
@@ -79,7 +107,9 @@ export async function PATCH(
     });
 
     return Response.json(profile);
-  } catch {
+  } catch (error) {
+    console.error(error);
+
     return Response.json(
       {
         message: "Profile not found",

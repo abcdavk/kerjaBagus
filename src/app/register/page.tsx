@@ -1,73 +1,92 @@
 "use client";
 
-import React, { useState } from "react";
-import Link from "next/link";
+import { RegisterFormData } from "@/models/register";
+import { useState } from "react";
+import StepAccount from "../components/register/StepAccount";
+import StepProfile from "../components/register/StepAddress";
+import StepRoleAndConfirm from "../components/register/StepRoleAndConfirm";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { RiArrowLeftLine, RiEyeLine, RiEyeOffLine } from "@remixicon/react";
-import { register } from "@/services/auth.service";
+import Link from "next/link";
 import { ApiError } from "@/services/api";
+import { register } from "@/services/auth.service";
+import { updateProfile } from "@/services/profiles.service";
+import { getUser, updateUser } from "@/services/users.service";
+import { useRouter } from "next/navigation";
+
+export enum RegisterStep {
+  ACCOUNT,
+  PROFILE,
+  CONFIRM,
+}
 
 export default function RegisterPage() {
   const router = useRouter();
+  const [step, setStep] = useState(RegisterStep.ACCOUNT);
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<RegisterFormData>({
     name: "",
     username: "",
     email: "",
     phone: "",
     password: "",
     confirmPassword: "",
+    province: "",
+    city: "",
+    district: "",
+    village: "",
+    postalCode: "",
+    isFreelancer: true,
+    isClient: false
   });
 
-  const [showPassword, setShowPassword] = useState(false);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const isFormValid =
-    formData.name &&
-    formData.username &&
-    formData.email &&
-    formData.phone &&
-    formData.password.length >= 8 &&
-    formData.password === formData.confirmPassword;
-
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (isFormValid) {
-      const { name, email, password, phone, username } = formData;
+  const handleRegister = async () => {
+    const {
+      name, email, password, phone, username, 
+      isClient, isFreelancer,
+      province, city, district, village, postalCode
+    } = formData;
       
 
-      setLoading(true);
-      setError("");
+    //   setLoading(true);
   
-      try {
-        await register({
-          email,
-          username,
-          displayName: name,
-          password,
-          phone,
-        });
+    try {
+      const { user: registerUser } = await register({
+        email,
+        username,
+        displayName: name,
+        password,
+        phone,
+      });
 
-        router.push("/profile");
-      } catch (err) {
-        if (err instanceof ApiError) {
-          setError(err.message);
-        } else {
-          setError("Terjadi kesalahan.");
+      const user = await updateUser(registerUser.id, {
+        isClient,
+        isFreelancer
+      });
+
+      const profile = await updateProfile(user.profile.id, {
+        address: {
+          country: "Indonesia",
+          province,
+          city,
+          district,
+          village,
+          postalCode
         }
-      }
+      });
+
+      router.push("/profile")
+    } catch (err) {
+      // if (err instanceof ApiError) {
+      //   console.error(err.message);
+      // }
+      //  else {
+      //   setError("Terjadi kesalahan.");
+      // }
     }
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-start bg-gradient-to-b from-[#FAF8F0] via-[#FAF8F0] to-[#E2E8DD] px-4 pt-30 pb-16">
+    <div className="flex min-h-screen flex-col items-center justify-start bg-gradient-to-b from-[#FAF8F0] via-[#FAF8F0] to-[#E2E8DD] px-4 pt-12 pb-16">
       <div className="mb-6 text-center flex flex-col items-center justify-center">
         <Link href="/" className="flex flex-col items-center gap-2">
           <Image
@@ -79,130 +98,33 @@ export default function RegisterPage() {
           />
         </Link>
       </div>
+      {/* <div> */}
+        {step === RegisterStep.ACCOUNT && (
+          <StepAccount
+            formData={formData}
+            setFormData={setFormData}
+            next={() => setStep(RegisterStep.PROFILE)}
+          />
+        )}
 
-      <div className="w-full max-w-lg rounded-xl bg-white p-8 shadow-lg border border-gray-100">
-        <button
-          onClick={() => router.back()}
-          className="flex items-center gap-1 hover:underline text-xs text-[#386641] mb-4 cursor-pointer"
-        >
-          <RiArrowLeftLine size={15} />
-          Kembali
-        </button>
+        {step === RegisterStep.PROFILE && (
+          <StepProfile
+            formData={formData}
+            setFormData={setFormData}
+            next={() => setStep(RegisterStep.CONFIRM)}
+            back={() => setStep(RegisterStep.ACCOUNT)}
+          />
+        )}
 
-        <h2 className="text-center text-xl font-bold text-gray-800">
-          Buat Akun
-        </h2>
-        <p className="text-center text-sm text-gray-500 mb-5">
-          Sudah punya akun?{" "}
-          <Link href="/login" className="text-[#386641] font-semibold hover:underline">
-            Sign in
-          </Link>
-        </p>
-
-        <form className="space-y-4" onSubmit={handleRegister}>
-
-          {
-            error && (
-              <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 text-xs rounded-lg">
-                {error}
-              </div>
-            )
-          }
-          <div>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Nama Lengkap*"
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-[#386641] focus:outline-none transition"
-              required
-            />
-          </div>
-
-
-          <div>
-            <input
-              type="text"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              placeholder="Username*"
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-[#386641] focus:outline-none transition"
-              required
-            />
-          </div>
-
-          <div className="flex gap-3">
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Email*"
-              className="w-1/2 rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-[#386641] focus:outline-none transition"
-              required
-            />
-            <div className="w-1/2">
-              <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                placeholder="Nomor Ponsel*"
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-[#386641] focus:outline-none transition"
-                required
-              />
-              <span className="text-[10px] text-gray-400 mt-1 block px-1">
-                Nomor terhubung dengan WhatsApp.
-              </span>
-            </div>
-          </div>
-
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Password"
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-[#386641] focus:outline-none transition"
-              required
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-3.5 text-gray-400 hover:text-gray-600 cursor-pointer"
-            >
-              {showPassword ? <RiEyeOffLine size={18} /> : <RiEyeLine size={18} />}
-            </button>
-          </div>
-
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              placeholder="Konfirmasi Password"
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-[#386641] focus:outline-none transition"
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={!isFormValid}
-            className={`w-full rounded-lg py-3 text-sm font-semibold transition mt-4 ${
-              isFormValid
-                ? "bg-[#386641] text-white cursor-pointer hover:bg-[#2d5234]"
-                : "bg-gray-200 text-gray-400 cursor-not-allowed"
-            }`}
-          >
-            Lanjutkan
-          </button>
-        </form>
-      </div>
+        {step === RegisterStep.CONFIRM && (
+          <StepRoleAndConfirm
+            formData={formData}
+            setFormData={setFormData}
+            back={() => setStep(RegisterStep.PROFILE)}
+            next={() => handleRegister()}
+          />
+        )}
+      {/* </div> */}
     </div>
   );
 }
