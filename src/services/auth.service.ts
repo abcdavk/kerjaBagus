@@ -27,3 +27,30 @@ export async function register(data: RegisterRequest) {
     body: JSON.stringify(data),
   });
 }
+
+export async function validateAccount(data: {
+  email?: string;
+  phone?: string;
+  password?: string;
+
+  displayName?: string;
+  username?: string;
+}) {
+  return api("/api/auth/validate-account", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+export async function validateAddress(data: {
+  province: string;
+  city: string;
+  district: string;
+  village: string;
+  postalCode: string;
+}) {
+  return api("/api/auth/validate-address", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}

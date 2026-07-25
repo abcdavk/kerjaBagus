@@ -1,3 +1,5 @@
+import { Address } from "@/generated/prisma/browser";
+
 export interface ProfileAddress {
   id: string;
 
@@ -72,6 +74,18 @@ export interface UpdateProfileRequest {
   currency?: string | null;
 
   isAvailable?: boolean;
+
+  address?: {
+    id?: string;
+    country?: string;
+    province?: string;
+    city?: string;
+    district?: string | null;
+    village?: string | null;
+    postalCode?: string | null;
+    latitude?: number | null;
+    longitude?: number | null;
+  }
 }
 
 export interface DeleteProfileResponse {

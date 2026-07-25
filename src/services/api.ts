@@ -1,10 +1,14 @@
 export class ApiError extends Error {
-  constructor(
-    message: string,
+  public errors: string | string[];
+  constructor( 
+    errors: string | string[], 
     public status: number
   ) {
-    super(message);
-  }
+    super(Array.isArray(errors) ? errors.join("\n") : errors);
+
+    this.name = "ApiError";
+    this.errors = errors;
+  } 
 }
 
 export async function api<T>(

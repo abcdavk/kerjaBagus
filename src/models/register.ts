@@ -10,7 +10,12 @@ export type RegisterFormData = {
 
   province: string;
   city: string;
-  distric: string;
+  district: string;
+  village: string;
+  postalCode: string;
+
+  isClient: boolean;
+  isFreelancer: boolean;
 }
 
 export type RegisterFormDataProps = {
