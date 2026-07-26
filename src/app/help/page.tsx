@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { ShieldAlert } from "lucide-react";
 import FaqItem from "@/app/components/FaqItem";
 
 type Faqs = {

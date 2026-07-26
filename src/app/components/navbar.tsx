@@ -3,10 +3,9 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { RiAddLine, RiMenuLine, RiCloseLine } from "@remixicon/react";
+import { RiAddLine, RiSearchLine, RiMenuLine, RiCloseLine } from "@remixicon/react";
 import { getUsernameInitials } from "../utils/user";
 import { me } from "@/services/auth.service";
-import { User } from "@/generated/prisma/client";
 import { getUser } from "@/services/users.service";
 import { GetUserResponse } from "@/models/user";
 import { GetProfileResponse } from "@/models/profile";
@@ -15,9 +14,7 @@ import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const [userData, setUserData] = useState<GetUserResponse | null>(null);
-  const [profileData, setProfileData] = useState<GetProfileResponse | null>(
-    null,
-  );
+  const [profileData, setProfileData] = useState<GetProfileResponse | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
@@ -67,6 +64,9 @@ export default function Navbar() {
     { href: "/saved", label: "Tersimpan" },
     { href: "/help", label: "Panduan" },
   ];
+
+  // Ambil role pengguna (CLIENT / FREELANCER)
+  const isFreelancer = (userData as any)?.role === "FREELANCER";
 
   return (
     <>
@@ -135,13 +135,24 @@ export default function Navbar() {
             </Link>
           )}
 
-          <Link
-            href="/jobs/create"
-            className="bg-[#F4991A] text-white py-2 px-4 rounded-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-103 cursor-pointer"
-          >
-            <RiAddLine size={20} className="inline mr-2" />
-            Post Pekerjaan
-          </Link>
+          {/* DYNAMIC ACTION BUTTON */}
+          {isFreelancer ? (
+            <Link
+              href="/jobs"
+              className="bg-[#386641] text-white py-2 px-4 rounded-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-103 cursor-pointer flex items-center gap-1.5 font-medium text-base"
+            >
+              <RiSearchLine size={20} />
+              Cari Lowongan
+            </Link>
+          ) : (
+            <Link
+              href="/jobs/create"
+              className="bg-[#F4991A] text-white py-2 px-4 rounded-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-103 cursor-pointer flex items-center gap-1.5 font-medium text-base"
+            >
+              <RiAddLine size={20} />
+              Post Pekerjaan
+            </Link>
+          )}
         </div>
 
         {/* HAMBURGER MOBILE */}
@@ -214,15 +225,27 @@ export default function Navbar() {
           })}
         </div>
 
+        {/* DYNAMIC ACTION BUTTON MOBILE */}
         <div className="border-t border-gray-100 pt-3">
-          <Link
-            href="/jobs/create"
-            onClick={() => setMobileOpen(false)}
-            className="bg-[#F4991A] text-white py-2 px-4 rounded-md text-center w-full block"
-          >
-            <RiAddLine size={20} className="inline mr-2" />
-            Post Pekerjaan
-          </Link>
+          {isFreelancer ? (
+            <Link
+              href="/jobs"
+              onClick={() => setMobileOpen(false)}
+              className="bg-[#386641] text-white py-2 px-4 rounded-md text-center w-full block font-medium"
+            >
+              <RiSearchLine size={20} className="inline mr-2" />
+              Cari Lowongan
+            </Link>
+          ) : (
+            <Link
+              href="/jobs/create"
+              onClick={() => setMobileOpen(false)}
+              className="bg-[#F4991A] text-white py-2 px-4 rounded-md text-center w-full block font-medium"
+            >
+              <RiAddLine size={20} className="inline mr-2" />
+              Post Pekerjaan
+            </Link>
+          )}
         </div>
       </div>
     </>
