@@ -77,6 +77,7 @@ model Job {
   budgetMin    Int?
   budgetMax    Int?
   deadline     DateTime?
+  whatsapp     String?
   isVerified   Boolean         @default(false)
   isOpen       Boolean         @default(true)
   tags         String[]

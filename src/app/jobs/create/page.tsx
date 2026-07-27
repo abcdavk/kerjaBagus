@@ -20,8 +20,12 @@ export default function CreateJobPage() {
   const [error, setError] = useState<string | null>(null);
 
   // Address states for cascading dropdowns
-  const [provinces, setProvinces] = useState<Array<{ id: string; name: string }>>([]);
-  const [regencies, setRegencies] = useState<Array<{ id: string; name: string }>>([]);
+  const [provinces, setProvinces] = useState<
+    Array<{ id: string; name: string }>
+  >([]);
+  const [regencies, setRegencies] = useState<
+    Array<{ id: string; name: string }>
+  >([]);
 
   // State untuk menyimpan array tags yang dipilih dari popover
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -29,6 +33,7 @@ export default function CreateJobPage() {
   const [formData, setFormData] = useState({
     title: "",
     company: "",
+    whatsapp: "",
     location: "ONSITE" as "ONSITE" | "REMOTE" | "HYBRID",
     province: "",
     provinceId: "",
@@ -45,7 +50,7 @@ export default function CreateJobPage() {
     const fetchProfile = async () => {
       try {
         const currentUser = await me();
-        const user = await getUser(currentUser.user.id)
+        const user = await getUser(currentUser.user.id);
         if (user?.profile?.id) {
           setProfileId(user.profile.id);
         } else if (user?.id) {
@@ -53,7 +58,9 @@ export default function CreateJobPage() {
           const profile = await getProfile(user.id);
           setProfileId(profile.id);
         } else {
-          setError("Tidak dapat menemukan profil pengguna. Silakan login ulang.");
+          setError(
+            "Tidak dapat menemukan profil pengguna. Silakan login ulang.",
+          );
         }
       } catch (err) {
         console.error("Gagal memuat profil:", err);
@@ -118,6 +125,7 @@ export default function CreateJobPage() {
       isOpen: true,
       tags: selectedTags,
       profileId,
+      whatsapp: formData.whatsapp,
       address: {
         country: "Indonesia",
         province: formData.province,
@@ -145,7 +153,10 @@ export default function CreateJobPage() {
       router.push("/jobs");
     } catch (err) {
       console.error("Gagal membuat lowongan:", err);
-      const message = err instanceof Error ? err.message : "Terjadi kesalahan saat memposting pekerjaan.";
+      const message =
+        err instanceof Error
+          ? err.message
+          : "Terjadi kesalahan saat memposting pekerjaan.";
       alert(message);
       setError(message);
     } finally {
@@ -187,13 +198,14 @@ export default function CreateJobPage() {
               Pasang Lowongan Pekerjaan
             </h1>
             <p className="text-sm text-gray-500 mt-1">
-              Isi detail lowongan kerja dengan jelas untuk mendapatkan calon pekerja yang sesuai.
+              Isi detail lowongan kerja dengan jelas untuk mendapatkan calon
+              pekerja yang sesuai.
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Judul & Nama Perusahaan */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Judul */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-xs font-semibold text-gray-700 mb-1">
                   Judul Pekerjaan <span className="text-red-500">*</span>
@@ -212,7 +224,8 @@ export default function CreateJobPage() {
 
               <div>
                 <label className="block text-xs font-semibold text-gray-700 mb-1">
-                  Nama Usaha / Perusahaan <span className="text-red-500">*</span>
+                  Nama Usaha / Perusahaan{" "}
+                  <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -222,6 +235,22 @@ export default function CreateJobPage() {
                   value={formData.company}
                   onChange={(e) =>
                     setFormData({ ...formData, company: e.target.value })
+                  }
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">
+                  Kontak WhatsApp <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="tel"
+                  required
+                  placeholder="misal: 6281234567890"
+                  className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
+                  value={formData.whatsapp}
+                  onChange={(e) =>
+                    setFormData({ ...formData, whatsapp: e.target.value })
                   }
                 />
               </div>
@@ -239,7 +268,10 @@ export default function CreateJobPage() {
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      location: e.target.value as "ONSITE" | "REMOTE" | "HYBRID",
+                      location: e.target.value as
+                        | "ONSITE"
+                        | "REMOTE"
+                        | "HYBRID",
                     })
                   }
                 >
@@ -255,11 +287,21 @@ export default function CreateJobPage() {
                 </label>
                 <Select
                   placeholder="Pilih Provinsi*"
-                  options={provinces.map((p) => ({ value: p.id, label: p.name }))}
+                  options={provinces.map((p) => ({
+                    value: p.id,
+                    label: p.name,
+                  }))}
                   isSearchable
                   value={
                     provinces.find((p) => p.name === formData.province)
-                      ? { value: provinces.find((p) => p.name === formData.province)!.id, label: provinces.find((p) => p.name === formData.province)!.name }
+                      ? {
+                          value: provinces.find(
+                            (p) => p.name === formData.province,
+                          )!.id,
+                          label: provinces.find(
+                            (p) => p.name === formData.province,
+                          )!.name,
+                        }
                       : null
                   }
                   onChange={(option) => {
@@ -300,8 +342,8 @@ export default function CreateJobPage() {
                       backgroundColor: state.isFocused
                         ? "#fef3c7"
                         : state.isSelected
-                        ? "#f59e0b"
-                        : "white",
+                          ? "#f59e0b"
+                          : "white",
                       color: state.isSelected ? "white" : "#1f2937",
                       "&:active": { backgroundColor: "#fde68a" },
                     }),
@@ -327,12 +369,22 @@ export default function CreateJobPage() {
                 </label>
                 <Select
                   placeholder="Pilih Kota/Kabupaten*"
-                  options={regencies.map((r) => ({ value: r.id, label: r.name }))}
+                  options={regencies.map((r) => ({
+                    value: r.id,
+                    label: r.name,
+                  }))}
                   isSearchable
                   isDisabled={!formData.provinceId}
                   value={
                     regencies.find((r) => r.name === formData.city)
-                      ? { value: regencies.find((r) => r.name === formData.city)!.id, label: regencies.find((r) => r.name === formData.city)!.name }
+                      ? {
+                          value: regencies.find(
+                            (r) => r.name === formData.city,
+                          )!.id,
+                          label: regencies.find(
+                            (r) => r.name === formData.city,
+                          )!.name,
+                        }
                       : null
                   }
                   onChange={(option) => {
@@ -359,9 +411,13 @@ export default function CreateJobPage() {
                       borderRadius: "0.75rem",
                       minHeight: "44px",
                       boxShadow: "none",
-                      backgroundColor: formData.provinceId ? "white" : "#f9fafb",
+                      backgroundColor: formData.provinceId
+                        ? "white"
+                        : "#f9fafb",
                       "&:hover": {
-                        borderColor: formData.provinceId ? "#9ca3af" : "#e5e7eb",
+                        borderColor: formData.provinceId
+                          ? "#9ca3af"
+                          : "#e5e7eb",
                       },
                     }),
                     menu: (base) => ({
@@ -374,8 +430,8 @@ export default function CreateJobPage() {
                       backgroundColor: state.isFocused
                         ? "#fef3c7"
                         : state.isSelected
-                        ? "#f59e0b"
-                        : "white",
+                          ? "#f59e0b"
+                          : "white",
                       color: state.isSelected ? "white" : "#1f2937",
                       "&:active": { backgroundColor: "#fde68a" },
                     }),

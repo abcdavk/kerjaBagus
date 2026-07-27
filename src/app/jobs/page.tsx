@@ -9,8 +9,6 @@ import { formatSalaryRange } from "../utils/salary";
 import { Loading } from "../components/loading";
 import { JobListItem } from "@/models/job";
 import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
-import { RiArrowLeftLine } from "@remixicon/react";
 import BackButton from "../components/backButton";
 
 export default function JobsPage() {
@@ -19,7 +17,6 @@ export default function JobsPage() {
   const province = searchParams.get("province") || "";
   const city = searchParams.get("city") || "";
   const location = searchParams.get("location") || "";
-  const router = useRouter();
 
   const [jobs, setJobs] = useState<JobListItem[]>([]);
   const [loading, setLoading] = useState(true);

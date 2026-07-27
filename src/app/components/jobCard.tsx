@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   RiBookmarkLine,
   RiVerifiedBadgeFill,
@@ -17,6 +18,7 @@ type JobCardProps = {
 };
 
 export default function JobCard({
+  id,
   logoText,
   logoColor,
   title,
@@ -27,7 +29,7 @@ export default function JobCard({
   verified = true,
 }: JobCardProps) {
   return (
-    <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col gap-3 cursor-pointer">
+    <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col gap-3">
       {/* HEADER */}
       <div className="flex items-start justify-between">
         <div
@@ -46,10 +48,15 @@ export default function JobCard({
       </div>
 
       {/* TITLE + COMPANY */}
-      <div>
-        <h3 className="font-semibold text-gray-900">{title}</h3>
-        <p className="text-sm text-gray-500">{company}</p>
-      </div>
+      <Link
+        href={`/jobs/${id}`}
+        className="block rounded-lg hover:bg-gray-50 -mx-1 px-1 py-1"
+      >
+        <div>
+          <h3 className="font-semibold text-gray-900">{title}</h3>
+          <p className="text-sm text-gray-500">{company}</p>
+        </div>
+      </Link>
 
       {/* LOCATION (PROVINCE) */}
       <div className="flex items-center gap-1.5 text-gray-600">
@@ -85,12 +92,12 @@ export default function JobCard({
           >
             <RiBookmarkLine size={16} className="text-gray-500" />
           </button>
-          <button
-            type="button"
-            className="text-gray-900 text-sm font-semibold px-5 py-2 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-[1.01] rounded-lg border border-gray-200 hover:bg-gray-50"
+          <Link
+            href={`/jobs/${id}`}
+            className="text-gray-900 text-sm font-semibold px-5 py-2 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-[1.01] rounded-lg border border-gray-200 hover:bg-gray-50 inline-flex items-center"
           >
             Lamar
-          </button>
+          </Link>
         </div>
       </div>
     </div>

@@ -3,7 +3,12 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { RiAddLine, RiSearchLine, RiMenuLine, RiCloseLine } from "@remixicon/react";
+import {
+  RiAddLine,
+  RiSearchLine,
+  RiMenuLine,
+  RiCloseLine,
+} from "@remixicon/react";
 import { getUsernameInitials } from "../utils/user";
 import { me } from "@/services/auth.service";
 import { getUser } from "@/services/users.service";
@@ -14,7 +19,9 @@ import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const [userData, setUserData] = useState<GetUserResponse | null>(null);
-  const [profileData, setProfileData] = useState<GetProfileResponse | null>(null);
+  const [profileData, setProfileData] = useState<GetProfileResponse | null>(
+    null,
+  );
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
@@ -66,7 +73,8 @@ export default function Navbar() {
   ];
 
   // Ambil role pengguna (CLIENT / FREELANCER)
-  const isFreelancer = (userData as any)?.role === "FREELANCER";
+  const isFreelancer =
+    userData && "role" in userData && userData.role === "FREELANCER";
 
   return (
     <>
