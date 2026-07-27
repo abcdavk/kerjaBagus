@@ -1,4 +1,6 @@
-import Link from "next/link";
+"use client";
+
+import { useRouter } from "next/navigation";
 import {
   RiBookmarkLine,
   RiVerifiedBadgeFill,
@@ -38,6 +40,8 @@ export default function JobCard({
   whatsapp,
   verified = true,
 }: JobCardProps) {
+  const router = useRouter();
+
   const whatsappLink = whatsapp
     ? `https://wa.me/${formatWhatsappNumber(whatsapp)}?text=${encodeURIComponent(
         `Halo, saya tertarik melamar posisi ${title} di ${company}`,
@@ -45,9 +49,11 @@ export default function JobCard({
     : null;
 
   return (
-    <Link
-      href={`/jobs/${id}`}
-      className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col gap-3 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-[1.01]"
+    <div
+      onClick={() => router.push(`/jobs/${id}`)}
+      role="link"
+      tabIndex={0}
+      className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col gap-3 cursor-pointer transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-[1.01]"
     >
       {/* HEADER */}
       <div className="flex items-start justify-between">
@@ -72,7 +78,7 @@ export default function JobCard({
         <p className="text-sm text-gray-500">{company}</p>
       </div>
 
-      {/* LOCATION (PROVINCE) */}
+      {/* LOCATION */}
       <div className="flex items-center gap-1.5 text-gray-600">
         <RiMapPinLine size={16} className="text-gray-400 shrink-0" />
         <p className="text-sm font-medium text-gray-700">{province}</p>
@@ -102,7 +108,7 @@ export default function JobCard({
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={(e) => e.preventDefault()}
+            onClick={(e) => e.stopPropagation()}
             className="h-9 w-9 flex items-center justify-center rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-[1.01]"
           >
             <RiBookmarkLine size={16} className="text-gray-500" />
@@ -122,7 +128,7 @@ export default function JobCard({
             <button
               type="button"
               disabled
-              onClick={(e) => e.preventDefault()}
+              onClick={(e) => e.stopPropagation()}
               className="rounded-lg bg-gray-300 px-4 py-2 text-sm font-semibold text-gray-500 cursor-not-allowed"
             >
               WA Tidak Tersedia
@@ -130,6 +136,6 @@ export default function JobCard({
           )}
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
