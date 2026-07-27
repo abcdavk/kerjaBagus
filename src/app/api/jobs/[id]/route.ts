@@ -6,10 +6,7 @@ type Context = {
   }>;
 };
 
-export async function GET(
-  request: Request,
-  { params }: Context
-) {
+export async function GET(request: Request, { params }: Context) {
   const { id } = await params;
 
   const job = await prisma.job.findUnique({
@@ -30,17 +27,14 @@ export async function GET(
       },
       {
         status: 404,
-      }
+      },
     );
   }
 
   return Response.json(job);
 }
 
-export async function PATCH(
-  request: Request,
-  { params }: Context
-) {
+export async function PATCH(request: Request, { params }: Context) {
   const { id } = await params;
 
   const body = await request.json();
@@ -58,12 +52,12 @@ export async function PATCH(
         description: body.description,
         banner: body.banner,
 
+        whatsapp: body.whatsapp,
+
         budgetMin: body.budgetMin,
         budgetMax: body.budgetMax,
 
-        deadline: body.deadline
-          ? new Date(body.deadline)
-          : undefined,
+        deadline: body.deadline ? new Date(body.deadline) : undefined,
 
         locationType: body.locationType,
 
@@ -89,15 +83,12 @@ export async function PATCH(
       },
       {
         status: 404,
-      }
+      },
     );
   }
 }
 
-export async function DELETE(
-  request: Request,
-  { params }: Context
-) {
+export async function DELETE(request: Request, { params }: Context) {
   const { id } = await params;
 
   try {
@@ -119,7 +110,7 @@ export async function DELETE(
       },
       {
         status: 404,
-      }
+      },
     );
   }
 }

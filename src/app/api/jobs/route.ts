@@ -57,9 +57,7 @@ export async function GET(request: Request) {
   // Remote / Hybrid / Onsite
   if (
     location &&
-    Object.values(JobLocationType).includes(
-      location as JobLocationType
-    )
+    Object.values(JobLocationType).includes(location as JobLocationType)
   ) {
     where.locationType = location as JobLocationType;
   }
@@ -88,12 +86,12 @@ export async function GET(request: Request) {
           createdAt: "asc",
         }
       : sort === "budget"
-      ? {
-          budgetMax: "desc",
-        }
-      : {
-          createdAt: "desc",
-        };
+        ? {
+            budgetMax: "desc",
+          }
+        : {
+            createdAt: "desc",
+          };
 
   const jobs = await prisma.job.findMany({
     where,
@@ -116,6 +114,8 @@ export async function GET(request: Request) {
       budgetMax: true,
 
       deadline: true,
+
+      whatsapp: true,
 
       locationType: true,
 
@@ -174,9 +174,9 @@ export async function POST(request: Request) {
         budgetMin: body.budgetMin,
         budgetMax: body.budgetMax,
 
-        deadline: body.deadline
-          ? new Date(body.deadline)
-          : null,
+        deadline: body.deadline ? new Date(body.deadline) : null,
+
+        whatsapp: body.whatsapp,
 
         locationType: body.locationType,
 
@@ -225,7 +225,7 @@ export async function POST(request: Request) {
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }
