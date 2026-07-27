@@ -91,6 +91,7 @@ export default function JobsPage() {
             }
             tags={job.tags}
             salaryRange={formatSalaryRange(job.budgetMin, job.budgetMax)}
+            whatsapp={job.whatsapp}
             verified={job.isVerified}
           />
         ))}

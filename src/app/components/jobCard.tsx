@@ -14,8 +14,17 @@ type JobCardProps = {
   province: string;
   tags: string[];
   salaryRange: string;
+  whatsapp?: string | null;
   verified?: boolean;
 };
+
+function formatWhatsappNumber(raw: string) {
+  let digits = raw.replace(/\D/g, "");
+  if (digits.startsWith("0")) {
+    digits = "62" + digits.slice(1);
+  }
+  return digits;
+}
 
 export default function JobCard({
   id,
@@ -26,10 +35,20 @@ export default function JobCard({
   province,
   tags,
   salaryRange,
+  whatsapp,
   verified = true,
 }: JobCardProps) {
+  const whatsappLink = whatsapp
+    ? `https://wa.me/${formatWhatsappNumber(whatsapp)}?text=${encodeURIComponent(
+        `Halo, saya tertarik melamar posisi ${title} di ${company}`,
+      )}`
+    : null;
+
   return (
-    <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col gap-3">
+    <Link
+      href={`/jobs/${id}`}
+      className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col gap-3 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-[1.01]"
+    >
       {/* HEADER */}
       <div className="flex items-start justify-between">
         <div
@@ -48,15 +67,10 @@ export default function JobCard({
       </div>
 
       {/* TITLE + COMPANY */}
-      <Link
-        href={`/jobs/${id}`}
-        className="block rounded-lg hover:bg-gray-50 -mx-1 px-1 py-1"
-      >
-        <div>
-          <h3 className="font-semibold text-gray-900">{title}</h3>
-          <p className="text-sm text-gray-500">{company}</p>
-        </div>
-      </Link>
+      <div>
+        <h3 className="font-semibold text-gray-900">{title}</h3>
+        <p className="text-sm text-gray-500">{company}</p>
+      </div>
 
       {/* LOCATION (PROVINCE) */}
       <div className="flex items-center gap-1.5 text-gray-600">
@@ -88,18 +102,34 @@ export default function JobCard({
         <div className="flex items-center gap-2">
           <button
             type="button"
+            onClick={(e) => e.preventDefault()}
             className="h-9 w-9 flex items-center justify-center rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-[1.01]"
           >
             <RiBookmarkLine size={16} className="text-gray-500" />
           </button>
-          <Link
-            href={`/jobs/${id}`}
-            className="text-gray-900 text-sm font-semibold px-5 py-2 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-[1.01] rounded-lg border border-gray-200 hover:bg-gray-50 inline-flex items-center"
-          >
-            Lamar
-          </Link>
+
+          {whatsappLink ? (
+            <a
+              href={whatsappLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="text-gray-900 text-sm font-semibold px-5 py-2 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-[1.01] rounded-lg border border-gray-200 hover:bg-gray-50 inline-flex items-center"
+            >
+              Lamar
+            </a>
+          ) : (
+            <button
+              type="button"
+              disabled
+              onClick={(e) => e.preventDefault()}
+              className="rounded-lg bg-gray-300 px-4 py-2 text-sm font-semibold text-gray-500 cursor-not-allowed"
+            >
+              WA Tidak Tersedia
+            </button>
+          )}
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
