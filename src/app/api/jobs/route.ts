@@ -8,6 +8,7 @@ export async function GET(request: Request) {
   const limit = Number(searchParams.get("limit") ?? "20");
 
   const search = searchParams.get("search");
+  const profileId = searchParams.get("profileId");
 
   const city = searchParams.get("city");
   const province = searchParams.get("province");
@@ -22,6 +23,10 @@ export async function GET(request: Request) {
   const sort = searchParams.get("sort") ?? "newest";
 
   const where: Prisma.JobWhereInput = {};
+
+  if (profileId) {
+    where.profileId = profileId;
+  }
 
   // Search
   if (search) {
@@ -109,6 +114,8 @@ export async function GET(request: Request) {
 
       title: true,
       banner: true,
+
+      description: true,
 
       budgetMin: true,
       budgetMax: true,

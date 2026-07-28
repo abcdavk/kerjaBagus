@@ -10,7 +10,12 @@ import { api } from "@/services/api";
 import { me } from "@/services/auth.service";
 import { getProfile } from "@/services/profiles.service";
 import { getUser } from "@/services/users.service";
-import { getProvinces, getRegencies } from "@/services/address.service";
+import {
+  getDistricts,
+  getProvinces,
+  getRegencies,
+  getVillages,
+} from "@/services/address.service";
 
 export default function CreateJobPage() {
   const router = useRouter();
@@ -18,12 +23,19 @@ export default function CreateJobPage() {
   const [profileId, setProfileId] = useState<string | null>(null);
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<{ type: "error" | "success"; text: string } | null>(null);
 
   // Address states for cascading dropdowns
   const [provinces, setProvinces] = useState<
     Array<{ id: string; name: string }>
   >([]);
   const [regencies, setRegencies] = useState<
+    Array<{ id: string; name: string }>
+  >([]);
+  const [districts, setDistricts] = useState<
+    Array<{ id: string; name: string }>
+  >([]);
+  const [villages, setVillages] = useState<
     Array<{ id: string; name: string }>
   >([]);
 
@@ -39,10 +51,16 @@ export default function CreateJobPage() {
     provinceId: "",
     city: "",
     cityId: "",
+    district: "",
+    districtId: "",
+    village: "",
+    villageId: "",
     budgetMin: "",
     budgetMax: "",
     description: "",
     requirements: "",
+    deadline: "",
+    banner: "",
   });
 
   // Fetch user profile on mount
@@ -86,40 +104,125 @@ export default function CreateJobPage() {
       getRegencies(formData.provinceId)
         .then((data) => setRegencies(data))
         .catch((err) => console.error("Gagal memuat kota/kabupaten:", err));
-      // Reset city when province changes
-      setFormData((prev) => ({ ...prev, city: "", cityId: "" }));
+      setFormData((prev) => ({
+        ...prev,
+        city: "",
+        cityId: "",
+        district: "",
+        districtId: "",
+        village: "",
+        villageId: "",
+      }));
     } else {
       setRegencies([]);
-      setFormData((prev) => ({ ...prev, city: "", cityId: "" }));
+      setDistricts([]);
+      setVillages([]);
+      setFormData((prev) => ({
+        ...prev,
+        city: "",
+        cityId: "",
+        district: "",
+        districtId: "",
+        village: "",
+        villageId: "",
+      }));
     }
   }, [formData.provinceId]);
+
+  useEffect(() => {
+    if (formData.cityId) {
+      getDistricts(formData.cityId)
+        .then((data) => setDistricts(data))
+        .catch((err) => console.error("Gagal memuat kecamatan:", err));
+      setFormData((prev) => ({
+        ...prev,
+        district: "",
+        districtId: "",
+        village: "",
+        villageId: "",
+      }));
+    } else {
+      setDistricts([]);
+      setVillages([]);
+      setFormData((prev) => ({
+        ...prev,
+        district: "",
+        districtId: "",
+        village: "",
+        villageId: "",
+      }));
+    }
+  }, [formData.cityId]);
+
+  useEffect(() => {
+    if (formData.districtId) {
+      getVillages(formData.districtId)
+        .then((data) => setVillages(data))
+        .catch((err) => console.error("Gagal memuat kelurahan/desa:", err));
+      setFormData((prev) => ({ ...prev, village: "", villageId: "" }));
+    } else {
+      setVillages([]);
+      setFormData((prev) => ({ ...prev, village: "", villageId: "" }));
+    }
+  }, [formData.districtId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!profileId) {
-      alert("Profil tidak ditemukan. Silakan login ulang.");
+      setFeedback({ type: "error", text: "Profil tidak ditemukan. Silakan login ulang." });
       return;
     }
 
     // Validate required address fields
     if (!formData.province || !formData.city) {
-      alert("Silakan pilih Provinsi dan Kota/Kabupaten");
+      setFeedback({ type: "error", text: "Silakan pilih Provinsi dan Kota/Kabupaten." });
+      return;
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const deadlineValue = formData.deadline ? new Date(formData.deadline) : null;
+    if (deadlineValue) {
+      deadlineValue.setHours(0, 0, 0, 0);
+      if (deadlineValue < today) {
+        setFeedback({ type: "error", text: "Deadline lamaran tidak boleh kurang dari hari ini." });
+        return;
+      }
+    }
+
+    const budgetMin = Number(formData.budgetMin);
+    const budgetMax = Number(formData.budgetMax);
+
+    if (Number.isNaN(budgetMin) || budgetMin < 100000) {
+      setFeedback({ type: "error", text: "Budget minimal harus lebih dari 100000." });
+      return;
+    }
+
+    if (Number.isNaN(budgetMax) || budgetMax < budgetMin) {
+      setFeedback({ type: "error", text: "Budget maksimal tidak boleh kurang dari budget minimal." });
+      return;
+    }
+
+    if (budgetMin >= budgetMax) {
+      setFeedback({ type: "error", text: "Budget minimal harus lebih kecil dari budget maksimal." });
       return;
     }
 
     setSubmitting(true);
     setError(null);
+    setFeedback(null);
 
     const payload = {
       company: formData.company,
       title: formData.title,
       description: formData.description,
       requirements: formData.requirements,
-      banner: "", // optional
+      banner: formData.banner || null,
       budgetMin: Number(formData.budgetMin) || 0,
       budgetMax: Number(formData.budgetMax) || 0,
-      deadline: null, // optional
+      deadline: formData.deadline ? new Date(formData.deadline) : null,
       locationType: formData.location,
       isVerified: false,
       isOpen: true,
@@ -130,8 +233,8 @@ export default function CreateJobPage() {
         country: "Indonesia",
         province: formData.province,
         city: formData.city,
-        district: "",
-        village: "",
+        district: formData.district || null,
+        village: formData.village || null,
         postalCode: "",
         latitude: 0,
         longitude: 0,
@@ -149,7 +252,6 @@ export default function CreateJobPage() {
         body: JSON.stringify(payload),
       });
 
-      alert("Lowongan pekerjaan berhasil diterbitkan!");
       router.push("/jobs");
     } catch (err) {
       console.error("Gagal membuat lowongan:", err);
@@ -201,6 +303,13 @@ export default function CreateJobPage() {
               Isi detail lowongan kerja dengan jelas untuk mendapatkan calon
               pekerja yang sesuai.
             </p>
+            {feedback && (
+              <div
+                className={`mt-3 rounded-lg border p-3 text-xs ${feedback.type === "error" ? "border-red-200 bg-red-50 text-red-600" : "border-green-200 bg-green-50 text-green-700"}`}
+              >
+                {feedback.text}
+              </div>
+            )}
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -255,6 +364,23 @@ export default function CreateJobPage() {
                 />
               </div>
             </div>
+
+            {/* Simpan buat nanti */}
+            {/* Banner */}
+            {/* <div>
+              <label className="block text-xs font-semibold text-gray-700 mb-1">
+                Banner (URL Gambar)
+              </label>
+              <input
+                type="url"
+                placeholder="misal: https://example.com/banner.jpg"
+                className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
+                value={formData.banner}
+                onChange={(e) =>
+                  setFormData({ ...formData, banner: e.target.value })
+                }
+              />
+            </div> */}
 
             {/* Sistem Kerja & Lokasi */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -312,6 +438,10 @@ export default function CreateJobPage() {
                         provinceId: "",
                         city: "",
                         cityId: "",
+                        district: "",
+                        districtId: "",
+                        village: "",
+                        villageId: "",
                       }));
                       return;
                     }
@@ -393,6 +523,10 @@ export default function CreateJobPage() {
                         ...prev,
                         city: "",
                         cityId: "",
+                        district: "",
+                        districtId: "",
+                        village: "",
+                        villageId: "",
                       }));
                       return;
                     }
@@ -400,6 +534,10 @@ export default function CreateJobPage() {
                       ...prev,
                       city: option.label,
                       cityId: option.value,
+                      district: "",
+                      districtId: "",
+                      village: "",
+                      villageId: "",
                     }));
                   }}
                   className="w-full"
@@ -418,6 +556,180 @@ export default function CreateJobPage() {
                         borderColor: formData.provinceId
                           ? "#9ca3af"
                           : "#e5e7eb",
+                      },
+                    }),
+                    menu: (base) => ({
+                      ...base,
+                      borderRadius: "0.75rem",
+                      boxShadow: "0 10px 15px -3px rgba(0,0,0,0.1)",
+                    }),
+                    option: (base, state) => ({
+                      ...base,
+                      backgroundColor: state.isFocused
+                        ? "#fef3c7"
+                        : state.isSelected
+                          ? "#f59e0b"
+                          : "white",
+                      color: state.isSelected ? "white" : "#1f2937",
+                      "&:active": { backgroundColor: "#fde68a" },
+                    }),
+                    singleValue: (base) => ({
+                      ...base,
+                      color: "#1f2937",
+                    }),
+                    placeholder: (base) => ({
+                      ...base,
+                      color: "#9ca3af",
+                    }),
+                    input: (base) => ({
+                      ...base,
+                      color: "#1f2937",
+                    }),
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">
+                  Kecamatan
+                </label>
+                <Select
+                  placeholder="Pilih Kecamatan"
+                  options={districts.map((item) => ({
+                    value: item.id,
+                    label: item.name,
+                  }))}
+                  isSearchable
+                  isDisabled={!formData.cityId}
+                  value={
+                    districts.find((item) => item.name === formData.district)
+                      ? {
+                          value: districts.find(
+                            (item) => item.name === formData.district,
+                          )!.id,
+                          label: districts.find(
+                            (item) => item.name === formData.district,
+                          )!.name,
+                        }
+                      : null
+                  }
+                  onChange={(option) => {
+                    if (!option) {
+                      setFormData((prev) => ({
+                        ...prev,
+                        district: "",
+                        districtId: "",
+                        village: "",
+                        villageId: "",
+                      }));
+                      return;
+                    }
+                    setFormData((prev) => ({
+                      ...prev,
+                      district: option.label,
+                      districtId: option.value,
+                      village: "",
+                      villageId: "",
+                    }));
+                  }}
+                  className="w-full"
+                  classNamePrefix="react-select"
+                  styles={{
+                    control: (base) => ({
+                      ...base,
+                      borderColor: formData.cityId ? "#d1d5db" : "#e5e7eb",
+                      borderRadius: "0.75rem",
+                      minHeight: "44px",
+                      boxShadow: "none",
+                      backgroundColor: formData.cityId ? "white" : "#f9fafb",
+                      "&:hover": {
+                        borderColor: formData.cityId ? "#9ca3af" : "#e5e7eb",
+                      },
+                    }),
+                    menu: (base) => ({
+                      ...base,
+                      borderRadius: "0.75rem",
+                      boxShadow: "0 10px 15px -3px rgba(0,0,0,0.1)",
+                    }),
+                    option: (base, state) => ({
+                      ...base,
+                      backgroundColor: state.isFocused
+                        ? "#fef3c7"
+                        : state.isSelected
+                          ? "#f59e0b"
+                          : "white",
+                      color: state.isSelected ? "white" : "#1f2937",
+                      "&:active": { backgroundColor: "#fde68a" },
+                    }),
+                    singleValue: (base) => ({
+                      ...base,
+                      color: "#1f2937",
+                    }),
+                    placeholder: (base) => ({
+                      ...base,
+                      color: "#9ca3af",
+                    }),
+                    input: (base) => ({
+                      ...base,
+                      color: "#1f2937",
+                    }),
+                  }}
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">
+                  Kelurahan / Desa
+                </label>
+                <Select
+                  placeholder="Pilih Kelurahan / Desa"
+                  options={villages.map((item) => ({
+                    value: item.id,
+                    label: item.name,
+                  }))}
+                  isSearchable
+                  isDisabled={!formData.districtId}
+                  value={
+                    villages.find((item) => item.name === formData.village)
+                      ? {
+                          value: villages.find(
+                            (item) => item.name === formData.village,
+                          )!.id,
+                          label: villages.find(
+                            (item) => item.name === formData.village,
+                          )!.name,
+                        }
+                      : null
+                  }
+                  onChange={(option) => {
+                    if (!option) {
+                      setFormData((prev) => ({
+                        ...prev,
+                        village: "",
+                        villageId: "",
+                      }));
+                      return;
+                    }
+                    setFormData((prev) => ({
+                      ...prev,
+                      village: option.label,
+                      villageId: option.value,
+                    }));
+                  }}
+                  className="w-full"
+                  classNamePrefix="react-select"
+                  styles={{
+                    control: (base) => ({
+                      ...base,
+                      borderColor: formData.districtId ? "#d1d5db" : "#e5e7eb",
+                      borderRadius: "0.75rem",
+                      minHeight: "44px",
+                      boxShadow: "none",
+                      backgroundColor: formData.districtId ? "white" : "#f9fafb",
+                      "&:hover": {
+                        borderColor: formData.districtId ? "#9ca3af" : "#e5e7eb",
                       },
                     }),
                     menu: (base) => ({
@@ -485,6 +797,21 @@ export default function CreateJobPage() {
                   }
                 />
               </div>
+            </div>
+
+            {/* Deadline */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-700 mb-1">
+                Deadline Lamaran
+              </label>
+              <input
+                type="date"
+                className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
+                value={formData.deadline}
+                onChange={(e) =>
+                  setFormData({ ...formData, deadline: e.target.value })
+                }
+              />
             </div>
 
             {/* 4. POPOVER TAG SELECTOR DITAMBAHKAN DI SINI */}

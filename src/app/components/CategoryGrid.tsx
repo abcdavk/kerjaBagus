@@ -55,7 +55,7 @@ const categories: Category[] = [
 
 function CategoryCard({ title, icon: Icon, description }: Category) {
   return (
-    <div className="bg-gray-50 rounded-2xl py-4 px-7 md:py-8 md:px-6 min-h-[220px] gap-2 shadow-sm border border-gray-100 transition-transform transform hover:-translate-y-1 cursor-pointer flex flex-col items-center justify-center text-center">
+    <div className="bg-white rounded-2xl py-4 px-7 md:py-8 md:px-6 min-h-[220px] gap-2 shadow-sm border border-gray-100 transition-transform transform hover:-translate-y-1 cursor-pointer flex flex-col items-center justify-center text-center">
       <div className="w-14 h-14 md:w-16 md:h-16 flex border border-[#F6D39E] items-center justify-center rounded-lg bg-white">
         <Icon size={20} className="text-[#344F1F]" />
       </div>

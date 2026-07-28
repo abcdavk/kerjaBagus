@@ -8,6 +8,7 @@ import {
   RiSearchLine,
   RiMenuLine,
   RiCloseLine,
+  RiEditBoxLine,
 } from "@remixicon/react";
 import { getUsernameInitials } from "../utils/user";
 import { me } from "@/services/auth.service";
@@ -16,12 +17,15 @@ import { GetUserResponse } from "@/models/user";
 import { GetProfileResponse } from "@/models/profile";
 import { getProfile } from "@/services/profiles.service";
 import { usePathname } from "next/navigation";
+import { GetJobsResponse } from "@/models/job";
+import { getJobs } from "@/services/jobs.service";
+import { prisma } from "@/lib/prisma";
 
 export default function Navbar() {
   const [userData, setUserData] = useState<GetUserResponse | null>(null);
-  const [profileData, setProfileData] = useState<GetProfileResponse | null>(
-    null,
-  );
+  const [profileData, setProfileData] = useState<GetProfileResponse | null>(null);
+  const [jobData, setjobData] = useState<GetJobsResponse | null>(null);
+  const [hasPostedJobs, setHasPostedJobs] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
@@ -34,9 +38,18 @@ export default function Navbar() {
         const profile = await getProfile(user.profile.id);
         setUserData(user);
         setProfileData(profile);
+
+        const response = await fetch(`/api/jobs?profileId=${profile.id}&limit=1`);
+        if (response.ok) {
+          const jobsData = await response.json();
+          setHasPostedJobs((jobsData?.pagination?.total ?? 0) > 0);
+        } else {
+          setHasPostedJobs(false);
+        }
       } catch {
         setUserData(null);
         setProfileData(null);
+        setHasPostedJobs(false);
       }
     }
 
@@ -75,6 +88,7 @@ export default function Navbar() {
   // Ambil role pengguna (CLIENT / FREELANCER)
   const isFreelancer =
     userData && "role" in userData && userData.role === "FREELANCER";
+  const shouldShowManageJobs = !isFreelancer && hasPostedJobs;
 
   return (
     <>
@@ -145,7 +159,15 @@ export default function Navbar() {
             )}
 
             {/* DYNAMIC ACTION BUTTON */}
-            {isFreelancer ? (
+            {shouldShowManageJobs ? (
+              <Link
+                href="/jobs/manage"
+                className="bg-[#F4991A] text-white py-2 px-4 rounded-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-103 cursor-pointer flex items-center gap-1.5 font-medium text-base"
+              >
+                <RiEditBoxLine size={20} />
+                Kelola Pekerjaan
+              </Link>
+            ) : isFreelancer ? (
               <Link
                 href="/jobs"
                 className="bg-[#386641] text-white py-2 px-4 rounded-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-103 cursor-pointer flex items-center gap-1.5 font-medium text-base"
@@ -236,7 +258,16 @@ export default function Navbar() {
 
         {/* DYNAMIC ACTION BUTTON MOBILE */}
         <div className="border-t border-gray-100 pt-3">
-          {isFreelancer ? (
+          {shouldShowManageJobs ? (
+            <Link
+              href="/jobs/manage"
+              onClick={() => setMobileOpen(false)}
+              className="bg-[#F4991A] text-white py-2 px-4 rounded-md text-center w-full block font-medium"
+            >
+              <RiEditBoxLine size={20} className="inline mr-2" />
+              Kelola Pekerjaan
+            </Link>
+          ) : isFreelancer ? (
             <Link
               href="/jobs"
               onClick={() => setMobileOpen(false)}
