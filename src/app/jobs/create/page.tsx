@@ -43,6 +43,8 @@ export default function CreateJobPage() {
     budgetMax: "",
     description: "",
     requirements: "",
+    deadline: "",
+    banner: "",
   });
 
   // Fetch user profile on mount
@@ -116,10 +118,10 @@ export default function CreateJobPage() {
       title: formData.title,
       description: formData.description,
       requirements: formData.requirements,
-      banner: "", // optional
+      banner: formData.banner || null,
       budgetMin: Number(formData.budgetMin) || 0,
       budgetMax: Number(formData.budgetMax) || 0,
-      deadline: null, // optional
+      deadline: formData.deadline ? new Date(formData.deadline) : null,
       locationType: formData.location,
       isVerified: false,
       isOpen: true,
@@ -254,6 +256,22 @@ export default function CreateJobPage() {
                   }
                 />
               </div>
+            </div>
+
+            {/* Banner */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-700 mb-1">
+                Banner (URL Gambar)
+              </label>
+              <input
+                type="url"
+                placeholder="misal: https://example.com/banner.jpg"
+                className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
+                value={formData.banner}
+                onChange={(e) =>
+                  setFormData({ ...formData, banner: e.target.value })
+                }
+              />
             </div>
 
             {/* Sistem Kerja & Lokasi */}
@@ -485,6 +503,21 @@ export default function CreateJobPage() {
                   }
                 />
               </div>
+            </div>
+
+            {/* Deadline */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-700 mb-1">
+                Deadline Lamaran
+              </label>
+              <input
+                type="date"
+                className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
+                value={formData.deadline}
+                onChange={(e) =>
+                  setFormData({ ...formData, deadline: e.target.value })
+                }
+              />
             </div>
 
             {/* 4. POPOVER TAG SELECTOR DITAMBAHKAN DI SINI */}

@@ -110,6 +110,8 @@ export async function GET(request: Request) {
       title: true,
       banner: true,
 
+      description: true,
+
       budgetMin: true,
       budgetMax: true,
 

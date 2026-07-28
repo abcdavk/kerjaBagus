@@ -17,7 +17,7 @@ type Props = RegisterFormDataProps & {
   back: () => void;
 };
 
-export default function StepProfile({
+export default function StepAddress({
   formData,
   setFormData,
   next,

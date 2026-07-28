@@ -3,7 +3,7 @@
 import { RegisterFormData } from "@/models/register";
 import { useState } from "react";
 import StepAccount from "../components/register/StepAccount";
-import StepProfile from "../components/register/StepAddress";
+import StepAddress from "../components/register/StepAddress";
 import StepRoleAndConfirm from "../components/register/StepRoleAndConfirm";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 
 export enum RegisterStep {
   ACCOUNT,
-  PROFILE,
+  ADDRESS,
   CONFIRM,
 }
 
@@ -103,12 +103,12 @@ export default function RegisterPage() {
           <StepAccount
             formData={formData}
             setFormData={setFormData}
-            next={() => setStep(RegisterStep.PROFILE)}
+            next={() => setStep(RegisterStep.ADDRESS)}
           />
         )}
 
-        {step === RegisterStep.PROFILE && (
-          <StepProfile
+        {step === RegisterStep.ADDRESS && (
+          <StepAddress
             formData={formData}
             setFormData={setFormData}
             next={() => setStep(RegisterStep.CONFIRM)}
@@ -120,7 +120,7 @@ export default function RegisterPage() {
           <StepRoleAndConfirm
             formData={formData}
             setFormData={setFormData}
-            back={() => setStep(RegisterStep.PROFILE)}
+            back={() => setStep(RegisterStep.ADDRESS)}
             next={() => handleRegister()}
           />
         )}

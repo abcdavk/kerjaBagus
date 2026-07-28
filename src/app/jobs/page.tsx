@@ -89,6 +89,7 @@ export default function JobsPage() {
                 ? `${job.address.city}, ${job.address.province}`
                 : job.address?.city || "Lokasi tidak tersedia"
             }
+            description={job.description}
             tags={job.tags}
             salaryRange={formatSalaryRange(job.budgetMin, job.budgetMax)}
             verified={job.isVerified}
