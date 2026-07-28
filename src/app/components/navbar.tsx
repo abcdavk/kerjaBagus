@@ -99,70 +99,71 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* MENU DESKTOP */}
-        <ul id="nav-links" className="hidden xl:flex gap-7">
-          {navLinks.map((link) => {
-            const isActive = pathname === link.href;
-            return (
-              <li key={link.label}>
-                <Link
-                  href={link.href}
-                  className={`relative text-xl pb-1 transition-colors ${
-                    isActive
-                      ? "text-[#F4991A] after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:w-full after:h-0.5 after:bg-[#F4991A]"
-                      : "text-inherit"
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+        <div className="flex gap-10">
+          {/* MENU DESKTOP */}
+          <ul id="nav-links" className="hidden xl:flex p-5 gap-7">
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <li key={link.label}>
+                  <Link
+                    href={link.href}
+                    className={`relative text-xl pb-1 transition-colors ${
+                      isActive
+                        ? "text-[#F4991A] after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:w-full after:h-0.5 after:bg-[#F4991A]"
+                        : "text-inherit"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
 
-        {/* ACTIONS DESKTOP */}
-        <div className="hidden xl:flex items-center gap-4">
-          {userData ? (
-            <Link
-              href="/profile"
-              className="flex items-center gap-3 px-4 py-1.5 rounded-full border border-[#F6D39E] bg-[#FBF6F0]/80 hover:bg-[#FBF6F0] transition"
-            >
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#E2D2B4] text-xs font-bold text-[#386641]">
-                {getUsernameInitials(profileData?.displayName ?? "")}
-              </div>
-              <span className="text-sm font-semibold text-[#386641] max-w-30 truncate">
-                {profileData?.displayName ?? ""}
-              </span>
-            </Link>
-          ) : (
-            <Link
-              href="/login"
-              className="text-[#77746E] border border-[#F6D39E] bg-[#FBF6F0] py-2 px-9 rounded-lg transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-103 cursor-pointer"
-            >
-              Masuk
-            </Link>
-          )}
+          {/* ACTIONS DESKTOP */}
+          <div className="hidden xl:flex items-center gap-4">
+            {userData ? (
+              <Link
+                href="/profile"
+                className="flex items-center gap-3 px-4 py-1.5 rounded-full border border-[#F6D39E] bg-[#FBF6F0]/80 hover:bg-[#FBF6F0] transition"
+              >
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#E2D2B4] text-xs font-bold text-[#386641]">
+                  {getUsernameInitials(profileData?.displayName ?? "")}
+                </div>
+                <span className="text-sm font-semibold text-[#386641] max-w-30 truncate">
+                  {profileData?.displayName ?? ""}
+                </span>
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                className="text-[#77746E] border border-[#F6D39E] bg-[#FBF6F0] py-2 px-9 rounded-lg transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-103 cursor-pointer"
+              >
+                Masuk
+              </Link>
+            )}
 
-          {/* DYNAMIC ACTION BUTTON */}
-          {isFreelancer ? (
-            <Link
-              href="/jobs"
-              className="bg-[#386641] text-white py-2 px-4 rounded-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-103 cursor-pointer flex items-center gap-1.5 font-medium text-base"
-            >
-              <RiSearchLine size={20} />
-              Cari Lowongan
-            </Link>
-          ) : (
-            <Link
-              href="/jobs/create"
-              className="bg-[#F4991A] text-white py-2 px-4 rounded-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-103 cursor-pointer flex items-center gap-1.5 font-medium text-base"
-            >
-              <RiAddLine size={20} />
-              Post Pekerjaan
-            </Link>
-          )}
+            {/* DYNAMIC ACTION BUTTON */}
+            {isFreelancer ? (
+              <Link
+                href="/jobs"
+                className="bg-[#386641] text-white py-2 px-4 rounded-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-103 cursor-pointer flex items-center gap-1.5 font-medium text-base"
+              >
+                <RiSearchLine size={20} />
+                Cari Lowongan
+              </Link>
+            ) : (
+              <Link
+                href="/jobs/create"
+                className="bg-[#F4991A] text-white py-2 px-4 rounded-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-103 cursor-pointer flex items-center gap-1.5 font-medium text-base"
+              >
+                <RiAddLine size={20} />
+                Post Pekerjaan
+              </Link>
+            )}
+          </div>
         </div>
-
         {/* HAMBURGER MOBILE */}
         <button
           type="button"
