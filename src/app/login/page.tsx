@@ -150,14 +150,6 @@ export default function LoginPage() {
             <span className="font-bold text-red-500">G</span> Masuk dengan
             Google
           </button>
-          <button
-            type="button"
-            onClick={() => router.push("/profile")}
-            className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#386641] px-4 py-2.5 text-sm font-semibold text-[#386641] bg-white hover:bg-gray-50 transition cursor-pointer"
-          >
-            <span className="font-bold text-blue-700">f</span> Masuk dengan
-            Facebook
-          </button>
         </div>
 
         <div className="mt-8 pt-4 border-t border-gray-100 text-center text-xs text-gray-500">

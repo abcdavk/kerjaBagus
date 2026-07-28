@@ -1,11 +1,15 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import {
   RiBookmarkLine,
+  RiBookmarkFill,
   RiVerifiedBadgeFill,
   RiMapPinLine,
 } from "@remixicon/react";
+
+import { isJobSaved, toggleSaveJob } from "@/app/utils/savedJobs";
 
 type JobCardProps = {
   id: string;
@@ -41,6 +45,30 @@ export default function JobCard({
   verified = true,
 }: JobCardProps) {
   const router = useRouter();
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    setSaved(isJobSaved(id));
+  }, [id]);
+
+  const handleBookmark = (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    const isSavedNow = toggleSaveJob({
+      id,
+      logoText,
+      logoColor,
+      title,
+      company,
+      province,
+      tags,
+      salaryRange,
+      whatsapp,
+      verified,
+    });
+
+    setSaved(isSavedNow);
+  };
 
   const whatsappLink = whatsapp
     ? `https://wa.me/${formatWhatsappNumber(whatsapp)}?text=${encodeURIComponent(
@@ -65,7 +93,7 @@ export default function JobCard({
         </div>
 
         {verified && (
-          <span className="flex items-center gap-1 text-xs font-medium text-green-700 bg-green-50 px-2 py-1 rounded-full">
+          <span className="flex items-center gap-1 text-xs font-medium text-[#386641] bg-green-50 px-2 py-1 rounded-full">
             <RiVerifiedBadgeFill size={14} />
             Terverifikasi
           </span>
@@ -106,12 +134,22 @@ export default function JobCard({
         </div>
 
         <div className="flex items-center gap-2">
+          {/* TOMBOL BOOKMARK DENGAN TEMA HIJAU (#386641) */}
           <button
             type="button"
-            onClick={(e) => e.stopPropagation()}
-            className="h-9 w-9 flex items-center justify-center rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-[1.01]"
+            onClick={handleBookmark}
+            className={`h-9 w-9 flex items-center justify-center rounded-lg border transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-[1.01] ${
+              saved
+                ? "bg-green-50 border-[#386641]/30 text-[#386641]"
+                : "border-gray-200 hover:bg-gray-50 text-gray-500"
+            }`}
+            title={saved ? "Hapus dari tersimpan" : "Simpan pekerjaan"}
           >
-            <RiBookmarkLine size={16} className="text-gray-500" />
+            {saved ? (
+              <RiBookmarkFill size={16} className="text-[#386641]" />
+            ) : (
+              <RiBookmarkLine size={16} />
+            )}
           </button>
 
           {whatsappLink ? (
