@@ -1,16 +1,14 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import BackButton from "@/app/components/backButton";
+import BookmarkButton from "@/app/components/BookmarkButton";
 import {
   RiBankCard2Line,
-  RiBookmarkLine,
-  RiBuildingLine,
   RiCalendarLine,
   RiMapPin2Line,
   RiMoneyDollarCircleLine,
   RiShieldCheckLine,
   RiTimeLine,
-  RiUserLine,
   RiWhatsappFill,
 } from "@remixicon/react";
 import { getCompanyInitials } from "@/app/utils/company";
@@ -67,11 +65,14 @@ export default async function JobDetailPage({ params }: Props) {
     });
   };
 
-  const locationTypeLabel = {
-    ONSITE: "On-site",
-    REMOTE: "Remote",
-    HYBRID: "Hybrid",
-  }[job.locationType] ?? job.locationType;
+  const salaryRangeStr = `${formatCurrency(job.budgetMin)} - ${formatCurrency(job.budgetMax)}`;
+
+  const locationTypeLabel =
+    {
+      ONSITE: "On-site",
+      REMOTE: "Remote",
+      HYBRID: "Hybrid",
+    }[job.locationType] ?? job.locationType;
 
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-4 px-4 py-6 md:gap-6 md:px-6 md:py-10">
@@ -109,18 +110,26 @@ export default async function JobDetailPage({ params }: Props) {
                 <button
                   type="button"
                   disabled
-                  className="w-full rounded-lg bg-gray-300 px-6 py-3 text-base font-semibold text-gray-500 cursor-not-allowed sm:w-auto"
+                  className="w-full cursor-not-allowed rounded-lg bg-gray-300 px-6 py-3 text-base font-semibold text-gray-500 sm:w-auto"
                 >
                   Nomor WhatsApp Tidak Tersedia
                 </button>
               )}
 
-              <button
-                type="button"
-                className="flex h-11 w-11 shrink-0 items-center justify-center self-start rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-[1.01] sm:self-auto"
-              >
-                <RiBookmarkLine size={18} className="text-gray-500" />
-              </button>
+              {/* INTEGRASI TOMBOL BOOKMARK HIJAU */}
+              <BookmarkButton
+                job={{
+                  id: job.id,
+                  title: job.title,
+                  company: job.company,
+                  province: job.address?.province || "Indonesia",
+                  tags: job.tags,
+                  salaryRange: salaryRangeStr,
+                  whatsapp: job.whatsapp,
+                  verified: job.isVerified,
+                  logoText: getCompanyInitials(job.company),
+                }}
+              />
             </div>
           </div>
 
@@ -144,7 +153,7 @@ export default async function JobDetailPage({ params }: Props) {
 
       <div className="grid gap-4 lg:grid-cols-[1.7fr_0.9fr]">
         <div className="flex flex-col gap-4">
-          <section className="flex-1 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm overflow-hidden">
+          <section className="flex-1 overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
             <h2 className="text-xl font-semibold text-gray-900">Deskripsi</h2>
 
             <p className="mt-3 whitespace-pre-line text-gray-700">
@@ -162,7 +171,7 @@ export default async function JobDetailPage({ params }: Props) {
                 {job.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="rounded-full bg-gray-100 px-3 py-1.5 text-sm text-gray-700"
+                    className="rounded-full border border-[#386641]/20 bg-[#386641]/10 px-3 py-1.5 text-sm font-medium text-[#386641]"
                   >
                     {tag}
                   </span>
@@ -174,15 +183,15 @@ export default async function JobDetailPage({ params }: Props) {
 
         <div className="space-y-4">
           <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-gray-900">Informasi Utama</h2>
+            <h2 className="text-lg font-semibold text-gray-900">
+              Informasi Utama
+            </h2>
             <div className="mt-4 space-y-4 text-sm text-gray-700">
               <div className="flex items-start gap-3">
-                <RiMoneyDollarCircleLine className="mt-0.5 w-5 shrink-0 text-[#F4991A]" />
+                <RiMoneyDollarCircleLine className="mt-0.5 w-5 shrink-0 text-[#386641]" />
                 <div>
                   <p className="font-semibold text-gray-900">Rentang Gaji</p>
-                  <p>
-                    {formatCurrency(job.budgetMin)} - {formatCurrency(job.budgetMax)}
-                  </p>
+                  <p className="font-bold text-[#386641]">{salaryRangeStr}</p>
                 </div>
               </div>
 
@@ -205,8 +214,12 @@ export default async function JobDetailPage({ params }: Props) {
               <div className="flex items-start gap-3">
                 <RiShieldCheckLine className="mt-0.5 w-5 shrink-0 text-[#F4991A]" />
                 <div>
-                  <p className="font-semibold text-gray-900">Status Verifikasi</p>
-                  <p>{job.isVerified ? "Terverifikasi" : "Belum diverifikasi"}</p>
+                  <p className="font-semibold text-gray-900">
+                    Status Verifikasi
+                  </p>
+                  <p>
+                    {job.isVerified ? "Terverifikasi" : "Belum diverifikasi"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -221,7 +234,9 @@ export default async function JobDetailPage({ params }: Props) {
                   <p className="font-semibold text-gray-900">Alamat</p>
                   <p>{location}</p>
                   {job.address?.postalCode ? (
-                    <p className="mt-1 text-gray-500">Kode Pos: {job.address.postalCode}</p>
+                    <p className="mt-1 text-gray-500">
+                      Kode Pos: {job.address.postalCode}
+                    </p>
                   ) : null}
                 </div>
               </div>
@@ -236,20 +251,42 @@ export default async function JobDetailPage({ params }: Props) {
             </div>
           </section>
 
-          <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-gray-900">Diposting oleh</h2>
-            <div className="mt-4 flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#F4991A]/10 text-sm font-semibold text-[#C67C00]">
-                {getCompanyInitials(job.profile?.displayName || job.company)}
-              </div>
-              <div>
-                <p className="font-semibold text-gray-900">
-                  {job.profile?.displayName || "Pemilik Lowongan"}
-                </p>
-                <p className="text-sm text-gray-500">{job.company}</p>
-              </div>
-            </div>
-          </section>
+<section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+  <h2 className="text-lg font-semibold text-gray-900">Diposting oleh</h2>
+
+  {job.profile?.id ? (
+    <Link
+      href={`/profile/${job.profile.id}`}
+      className="group mt-4 flex items-center justify-between rounded-xl p-2 -m-2 transition-colors hover:bg-gray-50"
+    >
+      <div className="flex items-center gap-3">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#E2D2B4] text-sm font-bold text-[#386641] transition-transform group-hover:scale-105">
+          {getCompanyInitials(job.profile?.displayName || job.company)}
+        </div>
+        <div>
+          <p className="font-semibold text-gray-900 group-hover:text-[#F4991A] transition-colors">
+            {job.profile?.displayName || "Pemilik Lowongan"}
+          </p>
+          <p className="text-sm text-gray-500">{job.company}</p>
+        </div>
+      </div>
+
+      <span className="text-xs font-medium text-gray-400 group-hover:text-[#F4991A] transition-all">
+        Lihat Profil &rarr;
+      </span>
+    </Link>
+  ) : (
+    <div className="mt-4 flex items-center gap-3">
+      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#E2D2B4] text-sm font-bold text-[#386641]">
+        {getCompanyInitials(job.company)}
+      </div>
+      <div>
+        <p className="font-semibold text-gray-900">Pemilik Lowongan</p>
+        <p className="text-sm text-gray-500">{job.company}</p>
+      </div>
+    </div>
+  )}
+</section>
         </div>
       </div>
     </div>
