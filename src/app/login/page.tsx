@@ -66,7 +66,7 @@ export default function LoginPage() {
             <RiArrowLeftLine size={15} />
             Kembali
           </button>
-          <a href="#" className="flex items-center gap-1 hover:underline">
+          <a href="/help" className="flex items-center gap-1 hover:underline">
             {/* {" "} */}
             Bantuan
           </a>
@@ -150,16 +150,6 @@ export default function LoginPage() {
             <span className="font-bold text-red-500">G</span> Masuk dengan
             Google
           </button>
-        </div>
-
-        <div className="mt-8 pt-4 border-t border-gray-100 text-center text-xs text-gray-500">
-          Apakah Anda HR?{" "}
-          <Link
-            href="/jobs/create"
-            className="text-[#386641] font-semibold hover:underline"
-          >
-            Buka Lowongan di KerjaBagus.com
-          </Link>
         </div>
       </div>
     </div>
