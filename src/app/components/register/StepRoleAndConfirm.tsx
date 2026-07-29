@@ -1,6 +1,6 @@
 import { RegisterFormData, RegisterFormDataProps } from "@/models/register";
 import { RiArrowLeftLine, RiArrowRightLine, RiBriefcase2Line, RiCheckboxCircleLine, RiCheckLine, RiUserFollowLine } from "@remixicon/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Props = RegisterFormDataProps & {
   back: () => void;
@@ -13,23 +13,27 @@ export default function StepRoleAndConfirm({
   back,
   next,
 }: Props) {
-  const [selectedRole, setSelectedRole] = useState<"CLIENT" | "FREELANCER">("FREELANCER");
+  const [selectedRole, setSelectedRole] = useState<"CLIENT" | "FREELANCER">(
+    formData.isClient ? "CLIENT" : "FREELANCER",
+  );
+
+  useEffect(() => {
+    const initialRole = formData.isClient ? "CLIENT" : "FREELANCER";
+    if (selectedRole !== initialRole) {
+      setSelectedRole(initialRole);
+    }
+  }, [formData.isClient, selectedRole]);
+
+  const handleRoleSelect = (role: "CLIENT" | "FREELANCER") => {
+    setSelectedRole(role);
+    setFormData({
+      ...formData,
+      isClient: role === "CLIENT",
+      isFreelancer: role === "FREELANCER",
+    });
+  };
 
   const handleContinue = () => {
-    if (selectedRole === "CLIENT") {
-      setFormData({
-        ...formData,
-        isClient: true,
-        isFreelancer: false,
-      });
-    } else {
-      setFormData({
-        ...formData,
-        isClient: true,
-        isFreelancer: false,
-      });
-    }
-
     next();
   };
 
@@ -60,7 +64,7 @@ export default function StepRoleAndConfirm({
         
         {/* Card 1: Client / Employer */}
         <div
-          onClick={() => setSelectedRole("CLIENT")}
+          onClick={() => handleRoleSelect("CLIENT")}
           className={`relative cursor-pointer rounded-2xl p-8 border-2 transition-all duration-200 bg-white shadow-sm hover:shadow-md ${
             selectedRole === "CLIENT"
               ? "border-amber-500 ring-2 ring-amber-500/20"
@@ -104,7 +108,7 @@ export default function StepRoleAndConfirm({
 
         {/* Card 2: Freelancer / Worker (Pekerja) */}
         <div
-          onClick={() => setSelectedRole("FREELANCER")}
+          onClick={() => handleRoleSelect("FREELANCER")}
           className={`relative cursor-pointer rounded-2xl p-8 border-2 transition-all duration-200 bg-white shadow-sm hover:shadow-md ${
             selectedRole === "FREELANCER"
               ? "border-amber-500 ring-2 ring-amber-500/20"
