@@ -70,7 +70,10 @@ export default function EditJobPage() {
   const [loading, setLoading] = useState(true);
   const [profileId, setProfileId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [feedback, setFeedback] = useState<{ type: "error" | "success"; text: string } | null>(null);
+  const [feedback, setFeedback] = useState<{
+    type: "error" | "success";
+    text: string;
+  } | null>(null);
 
   const [provinces, setProvinces] = useState<Array<{ id: string; name: string }>>([]);
   const [regencies, setRegencies] = useState<Array<{ id: string; name: string }>>([]);
@@ -265,17 +268,12 @@ export default function EditJobPage() {
     const budgetMax = Number(formData.budgetMax);
 
     if (Number.isNaN(budgetMin) || budgetMin < 100000) {
-      setFeedback({ type: "error", text: "Budget minimal harus lebih dari 100000." });
+      setFeedback({ type: "error", text: "Budget minimal harus lebih dari 100.000." });
       return;
     }
 
     if (Number.isNaN(budgetMax) || budgetMax < budgetMin) {
       setFeedback({ type: "error", text: "Budget maksimal tidak boleh kurang dari budget minimal." });
-      return;
-    }
-
-    if (budgetMin >= budgetMax) {
-      setFeedback({ type: "error", text: "Budget minimal harus lebih kecil dari budget maksimal." });
       return;
     }
 
@@ -320,7 +318,8 @@ export default function EditJobPage() {
       router.push("/jobs/manage");
     } catch (err) {
       console.error("Gagal memperbarui lowongan:", err);
-      const message = err instanceof Error ? err.message : "Terjadi kesalahan saat memperbarui lowongan.";
+      const message =
+        err instanceof Error ? err.message : "Terjadi kesalahan saat memperbarui lowongan.";
       setError(message);
     } finally {
       setSubmitting(false);
@@ -328,7 +327,7 @@ export default function EditJobPage() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 md:px-6 py-10">
+    <div className="mx-auto w-full max-w-4xl px-4 py-10 md:px-6">
       <div className="mb-6">
         <BackButton />
       </div>
@@ -345,14 +344,17 @@ export default function EditJobPage() {
       {error && !loading && (
         <div className="rounded-2xl border border-red-200 bg-red-50 p-6 text-center text-red-700">
           <p>{error}</p>
-          <button onClick={() => router.refresh()} className="mt-4 text-sm text-red-600 hover:underline">
+          <button
+            onClick={() => router.refresh()}
+            className="mt-4 text-sm text-red-600 hover:underline"
+          >
             Coba lagi
           </button>
         </div>
       )}
 
       {!loading && !error && (
-        <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm md:p-8 space-y-6">
+        <div className="space-y-6 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm md:p-8">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Edit Lowongan</h1>
             <p className="mt-1 text-sm text-gray-500">
@@ -360,7 +362,11 @@ export default function EditJobPage() {
             </p>
             {feedback && (
               <div
-                className={`mt-3 rounded-lg border p-3 text-xs ${feedback.type === "error" ? "border-red-200 bg-red-50 text-red-600" : "border-green-200 bg-green-50 text-green-700"}`}
+                className={`mt-3 rounded-lg border p-3 text-xs ${
+                  feedback.type === "error"
+                    ? "border-red-200 bg-red-50 text-red-600"
+                    : "border-green-200 bg-green-50 text-green-700"
+                }`}
               >
                 {feedback.text}
               </div>
@@ -412,27 +418,18 @@ export default function EditJobPage() {
               </div>
             </div>
 
-            {/* Simpan buat nanti */}
-            {/* <div>
-              <label className="mb-1 block text-xs font-semibold text-gray-700">
-                Banner (URL Gambar)
-              </label>
-              <input
-                type="url"
-                placeholder="misal: https://example.com/banner.jpg"
-                className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
-                value={formData.banner}
-                onChange={(e) => setFormData({ ...formData, banner: e.target.value })}
-              />
-            </div> */}
-
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               <div>
                 <label className="mb-1 block text-xs font-semibold text-gray-700">Sistem Kerja</label>
                 <select
                   className="w-full rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
                   value={formData.location}
-                  onChange={(e) => setFormData({ ...formData, location: e.target.value as "ONSITE" | "REMOTE" | "HYBRID" })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      location: e.target.value as "ONSITE" | "REMOTE" | "HYBRID",
+                    })
+                  }
                 >
                   <option value="ONSITE">Onsite</option>
                   <option value="REMOTE">Remote</option>
@@ -451,14 +448,30 @@ export default function EditJobPage() {
                   value={provinceOptions.find((item) => item.label === formData.province) ?? null}
                   onChange={async (option) => {
                     if (!option) {
-                      setFormData((prev) => ({ ...prev, province: "", provinceId: "", city: "", cityId: "", district: "", village: "" }));
+                      setFormData((prev) => ({
+                        ...prev,
+                        province: "",
+                        provinceId: "",
+                        city: "",
+                        cityId: "",
+                        district: "",
+                        village: "",
+                      }));
                       setRegencies([]);
                       setDistricts([]);
                       setVillages([]);
                       return;
                     }
 
-                    setFormData((prev) => ({ ...prev, province: option.label, provinceId: option.value, city: "", cityId: "", district: "", village: "" }));
+                    setFormData((prev) => ({
+                      ...prev,
+                      province: option.label,
+                      provinceId: option.value,
+                      city: "",
+                      cityId: "",
+                      district: "",
+                      village: "",
+                    }));
                     setDistricts([]);
                     setVillages([]);
                     const data = await getRegencies(option.value);
@@ -481,13 +494,25 @@ export default function EditJobPage() {
                   value={regencyOptions.find((item) => item.label === formData.city) ?? null}
                   onChange={async (option) => {
                     if (!option) {
-                      setFormData((prev) => ({ ...prev, city: "", cityId: "", district: "", village: "" }));
+                      setFormData((prev) => ({
+                        ...prev,
+                        city: "",
+                        cityId: "",
+                        district: "",
+                        village: "",
+                      }));
                       setDistricts([]);
                       setVillages([]);
                       return;
                     }
 
-                    setFormData((prev) => ({ ...prev, city: option.label, cityId: option.value, district: "", village: "" }));
+                    setFormData((prev) => ({
+                      ...prev,
+                      city: option.label,
+                      cityId: option.value,
+                      district: "",
+                      village: "",
+                    }));
                     setVillages([]);
                     const data = await getDistricts(option.value);
                     setDistricts(data);
@@ -557,7 +582,9 @@ export default function EditJobPage() {
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>
-                <label className="mb-1 block text-xs font-semibold text-gray-700">Budget Minimal (Rp) <span className="text-red-500">*</span></label>
+                <label className="mb-1 block text-xs font-semibold text-gray-700">
+                  Budget Minimal (Rp) <span className="text-red-500">*</span>
+                </label>
                 <input
                   type="number"
                   required
@@ -569,7 +596,9 @@ export default function EditJobPage() {
               </div>
 
               <div>
-                <label className="mb-1 block text-xs font-semibold text-gray-700">Budget Maksimal (Rp) <span className="text-red-500">*</span></label>
+                <label className="mb-1 block text-xs font-semibold text-gray-700">
+                  Budget Maksimal (Rp) <span className="text-red-[#F4991A]">*</span>
+                </label>
                 <input
                   type="number"
                   required

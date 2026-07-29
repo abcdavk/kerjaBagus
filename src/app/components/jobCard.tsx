@@ -134,7 +134,7 @@ export default function JobCard({
         </div>
 
         <div className="flex items-center gap-2">
-          {/* TOMBOL BOOKMARK DENGAN TEMA HIJAU (#386641) */}
+          {/* TOMBOL BOOKMARK */}
           <button
             type="button"
             onClick={handleBookmark}
