@@ -56,12 +56,11 @@ export default function RegisterPage() {
         displayName: name,
         password,
         phone,
+        isFreelancer,
+        isClient
       });
 
-      const user = await updateUser(registerUser.id, {
-        isClient,
-        isFreelancer
-      });
+      const user = await getUser(registerUser.id);
 
       const profile = await updateProfile(user.profile.id, {
         address: {
