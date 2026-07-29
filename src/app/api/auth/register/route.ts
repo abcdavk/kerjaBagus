@@ -13,6 +13,8 @@ export async function POST(request: Request) {
       password,
       displayName,
       username,
+      isFreelancer,
+      isClient
     } = body;
 
     // Input validation
@@ -132,6 +134,8 @@ export async function POST(request: Request) {
           email,
           phone,
           passwordHash,
+          isFreelancer,
+          isClient
         },
       });
 
