@@ -85,10 +85,7 @@ export default function Navbar() {
     { href: "/help", label: "Panduan" },
   ];
 
-  // Ambil role pengguna (CLIENT / FREELANCER)
-  const isFreelancer =
-    userData && "role" in userData && userData.role === "FREELANCER";
-  const shouldShowManageJobs = !isFreelancer && hasPostedJobs;
+  const shouldShowManageJobs = userData?.isClient && hasPostedJobs;
 
   return (
     <>
@@ -167,7 +164,7 @@ export default function Navbar() {
                 <RiEditBoxLine size={20} />
                 Kelola Pekerjaan
               </Link>
-            ) : isFreelancer ? (
+            ) : userData?.isFreelancer ? (
               <Link
                 href="/jobs"
                 className="bg-[#386641] text-white py-2 px-4 rounded-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-103 cursor-pointer flex items-center gap-1.5 font-medium text-base"
@@ -256,18 +253,8 @@ export default function Navbar() {
           })}
         </div>
 
-        {/* DYNAMIC ACTION BUTTON MOBILE */}
         <div className="border-t border-gray-100 pt-3">
-          {shouldShowManageJobs ? (
-            <Link
-              href="/jobs/manage"
-              onClick={() => setMobileOpen(false)}
-              className="bg-[#F4991A] text-white py-2 px-4 rounded-md text-center w-full block font-medium"
-            >
-              <RiEditBoxLine size={20} className="inline mr-2" />
-              Kelola Pekerjaan
-            </Link>
-          ) : isFreelancer ? (
+          {userData?.isFreelancer ? (
             <Link
               href="/jobs"
               onClick={() => setMobileOpen(false)}
@@ -276,6 +263,26 @@ export default function Navbar() {
               <RiSearchLine size={20} className="inline mr-2" />
               Cari Lowongan
             </Link>
+          ) : userData?.isClient ? (
+            shouldShowManageJobs ? (
+              <Link
+                href="/jobs/manage"
+                onClick={() => setMobileOpen(false)}
+                className="bg-[#F4991A] text-white py-2 px-4 rounded-md text-center w-full block font-medium"
+              >
+                <RiEditBoxLine size={20} className="inline mr-2" />
+                Kelola Pekerjaan
+              </Link>
+            ) : (
+              <Link
+                href="/jobs/create"
+                onClick={() => setMobileOpen(false)}
+                className="bg-[#F4991A] text-white py-2 px-4 rounded-md text-center w-full block font-medium"
+              >
+                <RiAddLine size={20} className="inline mr-2" />
+                Post Pekerjaan
+              </Link>
+            )
           ) : (
             <Link
               href="/jobs/create"
