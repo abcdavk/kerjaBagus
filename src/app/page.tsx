@@ -18,6 +18,9 @@ import {
 import { PROVINCES } from "@/lib/constant";
 import CategoryGrid from "@/app/components/CategoryGrid";
 import Link from "next/link";
+import { me } from "@/services/auth.service";
+import { getUser } from "@/services/users.service";
+import { GetUserResponse } from "@/models/user";
 
 export default function Home() {
   const router = useRouter();
@@ -50,6 +53,22 @@ export default function Home() {
   };
 
   const [featuredJobs, setFeaturedJobs] = useState<JobListItem[]>([]);
+
+  const [userData, setUserData] = useState<GetUserResponse | null>(null);
+
+  useEffect(() => {
+    async function loadUser() {
+      try {
+        const data = await me();
+        const user = await getUser(data.user.id);
+        setUserData(user);
+      } catch {
+        setUserData(null);
+      }
+    }
+
+    loadUser();
+  }, []);
 
   useEffect(() => {
     async function load() {
@@ -94,7 +113,7 @@ export default function Home() {
                     type="search"
                     value={keyword}
                     onChange={(e) => setKeyword(e.target.value)}
-                    placeholder="Cari kategori atau nama pekerjaan..."
+                    placeholder="Cari keahlian atau nama pekerjaan..."
                     className="bg-transparent ml-3 md:ml-4 text-sm md:text-lg font-medium outline-none w-full placeholder:text-gray-500"
                   />
                 </div>
@@ -186,27 +205,31 @@ export default function Home() {
 
           {/* ACTION BUTTON */}
           <div className="flex flex-col md:flex-row justify-center items-center mb-5 mt-8 gap-4 w-full">
-            {/* CEK LOWONGAN */}
-            <Link
-              href="/jobs"
-              className="group w-full md:w-auto max-w-md bg-[#344F1F] hover:bg-[#466B29] text-white flex items-center justify-center gap-3 py-3 md:py-3 px-5 md:px-8 text-xl md:text-2xl font-medium rounded-full transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 cursor-pointer"
-            >
-              Cek Lowongan
-              <div className="rounded-full w-10 h-10 p-2 bg-white text-black flex items-center justify-center transition-transform duration-300 group-hover:rotate-45">
-                <RiArrowRightUpLine className="w-5 h-5" />
-              </div>
-            </Link>
+            {/* CEK LOWONGAN - tampil kalau bukan client (freelancer / belum login) */}
+            {!userData?.isClient && (
+              <Link
+                href="/jobs"
+                className="group w-full md:w-auto max-w-md bg-[#344F1F] hover:bg-[#466B29] text-white flex items-center justify-center gap-3 py-3 md:py-3 px-5 md:px-8 text-xl md:text-2xl font-medium rounded-full transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 cursor-pointer"
+              >
+                Cek Lowongan
+                <div className="rounded-full w-10 h-10 p-2 bg-white text-black flex items-center justify-center transition-transform duration-300 group-hover:rotate-45">
+                  <RiArrowRightUpLine className="w-5 h-5" />
+                </div>
+              </Link>
+            )}
 
-            {/* POST PEKERJAAN */}
-            <Link
-              href="/jobs/create"
-              className="w-full group md:w-auto max-w-md bg-[#F4991A] hover:bg-[#C46D00] text-white flex items-center justify-center gap-3 py-3 md:py-3 px-5 md:px-8 text-xl md:text-2xl font-medium rounded-full transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 cursor-pointer"
-            >
-              Post Pekerjaan
-              <div className="rounded-full w-10 h-10 p-2 bg-white text-black flex items-center justify-center transition-transform duration-300 group-hover:rotate-90">
-                <RiAddLine className="w-5 h-5" />
-              </div>
-            </Link>
+            {/* POST PEKERJAAN - tampil kalau client atau belum login */}
+            {!userData?.isFreelancer && (
+              <Link
+                href="/jobs/create"
+                className="w-full group md:w-auto max-w-md bg-[#F4991A] hover:bg-[#C46D00] text-white flex items-center justify-center gap-3 py-3 md:py-3 px-5 md:px-8 text-xl md:text-2xl font-medium rounded-full transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 cursor-pointer"
+              >
+                Post Pekerjaan
+                <div className="rounded-full w-10 h-10 p-2 bg-white text-black flex items-center justify-center transition-transform duration-300 group-hover:rotate-90">
+                  <RiAddLine className="w-5 h-5" />
+                </div>
+              </Link>
+            )}
           </div>
         </div>
       </section>

@@ -55,38 +55,6 @@ function getInitials(name: string) {
   return parts[0].substring(0, 2).toUpperCase();
 }
 
-// Data dummy, ganti/hapus kalau udah nyambung ke API
-const DUMMY_APPLICATIONS: Application[] = [
-  {
-    id: "1",
-    jobTitle: "UI/UX Designer",
-    companyName: "Gojek Teknologi",
-    appliedAt: "2026-07-12",
-    status: "pending",
-  },
-  {
-    id: "2",
-    jobTitle: "Frontend Developer",
-    companyName: "Tokopedia",
-    appliedAt: "2026-07-05",
-    status: "interview",
-  },
-  {
-    id: "3",
-    jobTitle: "Backend Engineer",
-    companyName: "Bank Sinar",
-    appliedAt: "2026-06-28",
-    status: "accepted",
-  },
-  {
-    id: "4",
-    jobTitle: "Data Analyst",
-    companyName: "Ruangguru",
-    appliedAt: "2026-06-15",
-    status: "rejected",
-  },
-];
-
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString("id-ID", {
     day: "numeric",
@@ -96,7 +64,7 @@ function formatDate(dateStr: string) {
 }
 
 export default function ApplicationHistoryCard({
-  applications = DUMMY_APPLICATIONS,
+  applications = [],
 }: {
   applications?: Application[];
 }) {

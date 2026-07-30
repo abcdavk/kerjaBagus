@@ -20,6 +20,9 @@ export async function GET(request: Request) {
 
   const isOpen = searchParams.get("isOpen");
 
+  const tags = searchParams.get("tags");
+  const matchAllTags = searchParams.get("matchAllTags") === "true";
+
   const sort = searchParams.get("sort") ?? "newest";
 
   const where: Prisma.JobWhereInput = {};
@@ -41,6 +44,11 @@ export async function GET(request: Request) {
         description: {
           contains: search,
           mode: "insensitive",
+        },
+      },
+      {
+        tags: {
+          has: search,
         },
       },
     ];
@@ -83,6 +91,18 @@ export async function GET(request: Request) {
   // Open
   if (isOpen !== null) {
     where.isOpen = isOpen === "true";
+  }
+
+  // Tags
+  if (tags) {
+    const tagList = tags
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean);
+
+    if (tagList.length > 0) {
+      where.tags = matchAllTags ? { hasEvery: tagList } : { hasSome: tagList };
+    }
   }
 
   const orderBy: Prisma.JobOrderByWithRelationInput =
