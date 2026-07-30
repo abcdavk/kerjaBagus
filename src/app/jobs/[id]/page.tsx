@@ -116,7 +116,7 @@ export default async function JobDetailPage({ params }: Props) {
                 </button>
               )}
 
-              {/* INTEGRASI TOMBOL BOOKMARK HIJAU */}
+              {/* INTEGRASI TOMBOL BOOKMARK */}
               <BookmarkButton
                 job={{
                   id: job.id,

@@ -814,7 +814,7 @@ export default function CreateJobPage() {
               />
             </div>
 
-            {/* 4. POPOVER TAG SELECTOR DITAMBAHKAN DI SINI */}
+            {/* POPOVER TAG SELECTOR DITAMBAHKAN*/}
             <TagPopover
               selectedTags={selectedTags}
               setSelectedTags={setSelectedTags}

@@ -17,9 +17,7 @@ type Props = {
 export default async function PublicProfilePage({ params }: Props) {
   const { id } = await params;
 
-  // 1. Query Prisma yang SANGAT PRESISI sesuai schema kamu:
-  // - Mencari berdasarkan Profile ID atau User ID
-  // - Include 'job' (bukan 'jobs') dan 'address' di dalamnya
+  //  Mencari berdasarkan Profile ID atau User ID
   const profile = await prisma.profile.findFirst({
     where: {
       OR: [{ id: id }, { userId: id }],
