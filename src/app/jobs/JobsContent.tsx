@@ -4,8 +4,8 @@ import JobCard from "@/app/components/jobCard";
 import { getJobs } from "@/services/jobs.service";
 import { useEffect, useState } from "react";
 import { faker } from "@faker-js/faker";
-import { getCompanyInitials } from "../utils/company"; // Sesuaikan path jika utils sudah dipindah
-import { formatSalaryRange } from "../utils/salary"; // Sesuaikan path jika utils sudah dipindah
+import { getCompanyInitials } from "../utils/company"; 
+import { formatSalaryRange } from "../utils/salary"; 
 import { Loading } from "../components/loading";
 import { JobListItem } from "@/models/job";
 import { useSearchParams } from "next/navigation";
@@ -73,7 +73,7 @@ export default function JobsContent() {
         </p>
       </div>
 
-      {/* JOB CARD GRID - DI SINI TEMPAT MERENDER JOBCARD */}
+      {/* JOB CARD GRID  */}
       <div className="grid grid-cols-1 gap-6 mb-7 md:grid-cols-2 xl:grid-cols-3">
         {jobs.map((job) => (
           <JobCard

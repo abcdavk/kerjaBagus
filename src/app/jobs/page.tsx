@@ -1,64 +1,11 @@
-<<<<<<< HEAD
-"use client";
-
-import JobCard from "@/app/components/jobCard";
-import { getJobs } from "@/services/jobs.service";
-import { useEffect, useState } from "react";
-import { faker } from "@faker-js/faker";
-import { getCompanyInitials } from "../utils/company"; 
-import { formatSalaryRange } from "../utils/salary"; 
-=======
 import { Suspense } from "react";
 import JobsContent from "./JobsContent";
->>>>>>> f57497fb904fff8ec0138c50daa9344ab0c5e0de
 import { Loading } from "../components/loading";
 
 export default function JobsPage() {
   return (
-<<<<<<< HEAD
-    <div className="mx-auto w-full max-w-7xl px-4 md:px-6 py-10">
-      {/* BUTTON BACK */}
-      <div className="mb-6">
-        <BackButton />
-      </div>
-
-      {/* CONTENT HEADER */}
-      <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold text-gray-900">
-          {jobs.length} Lowongan Tersedia
-        </h1>
-        <p className="mt-2 text-gray-500">
-          Temukan pekerjaan yang sesuai dengan keahlianmu.
-        </p>
-      </div>
-
-      {/* JOB CARD GRID  */}
-      <div className="grid grid-cols-1 gap-6 mb-7 md:grid-cols-2 xl:grid-cols-3">
-        {jobs.map((job) => (
-          <JobCard
-            key={job.id}
-            id={job.id}
-            logoText={getCompanyInitials(job.company)}
-            logoColor={faker.color.rgb()}
-            title={job.title}
-            company={job.company}
-            province={
-              job.address?.province
-                ? `${job.address.city}, ${job.address.province}`
-                : job.address?.city || "Lokasi tidak tersedia"
-            }
-            tags={job.tags}
-            salaryRange={formatSalaryRange(job.budgetMin, job.budgetMax)}
-            whatsapp={job.whatsapp}
-            verified={job.isVerified}
-          />
-        ))}
-      </div>
-    </div>
-=======
     <Suspense fallback={<Loading />}>
       <JobsContent />
     </Suspense>
->>>>>>> f57497fb904fff8ec0138c50daa9344ab0c5e0de
   );
 }
