@@ -30,4 +30,6 @@ export interface RegisterRequest {
 
   displayName: string;
   username: string;
+  isFreelancer: boolean;
+  isClient: boolean;
 }

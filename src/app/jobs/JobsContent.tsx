@@ -1,21 +1,62 @@
-<<<<<<< HEAD
 "use client";
 
 import JobCard from "@/app/components/jobCard";
 import { getJobs } from "@/services/jobs.service";
 import { useEffect, useState } from "react";
 import { faker } from "@faker-js/faker";
-import { getCompanyInitials } from "../utils/company"; 
-import { formatSalaryRange } from "../utils/salary"; 
-=======
-import { Suspense } from "react";
-import JobsContent from "./JobsContent";
->>>>>>> f57497fb904fff8ec0138c50daa9344ab0c5e0de
+import { getCompanyInitials } from "../utils/company"; // Sesuaikan path jika utils sudah dipindah
+import { formatSalaryRange } from "../utils/salary"; // Sesuaikan path jika utils sudah dipindah
 import { Loading } from "../components/loading";
+import { JobListItem } from "@/models/job";
+import { useSearchParams } from "next/navigation";
+import BackButton from "../components/backButton";
 
-export default function JobsPage() {
+export default function JobsContent() {
+  const searchParams = useSearchParams();
+  const search = searchParams.get("search") || "";
+  const province = searchParams.get("province") || "";
+  const city = searchParams.get("city") || "";
+  const location = searchParams.get("location") || "";
+
+  const [jobs, setJobs] = useState<JobListItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let isActive = true;
+
+    async function loadJobs() {
+      setLoading(true);
+      try {
+        const { data } = await getJobs({
+          search: search || undefined,
+          province: province || undefined,
+          city: city || undefined,
+          location: (location as "ONSITE" | "REMOTE" | "HYBRID") || undefined,
+          limit: 12,
+        });
+
+        if (isActive) {
+          setJobs(data);
+        }
+      } finally {
+        if (isActive) {
+          setLoading(false);
+        }
+      }
+    }
+
+    loadJobs();
+
+    return () => {
+      isActive = false;
+    };
+  }, [search, province, city, location]);
+
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
-<<<<<<< HEAD
     <div className="mx-auto w-full max-w-7xl px-4 md:px-6 py-10">
       {/* BUTTON BACK */}
       <div className="mb-6">
@@ -32,7 +73,7 @@ export default function JobsPage() {
         </p>
       </div>
 
-      {/* JOB CARD GRID  */}
+      {/* JOB CARD GRID - DI SINI TEMPAT MERENDER JOBCARD */}
       <div className="grid grid-cols-1 gap-6 mb-7 md:grid-cols-2 xl:grid-cols-3">
         {jobs.map((job) => (
           <JobCard
@@ -55,10 +96,5 @@ export default function JobsPage() {
         ))}
       </div>
     </div>
-=======
-    <Suspense fallback={<Loading />}>
-      <JobsContent />
-    </Suspense>
->>>>>>> f57497fb904fff8ec0138c50daa9344ab0c5e0de
   );
 }

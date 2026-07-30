@@ -84,7 +84,7 @@ const faqs: Faqs[] = [
           <li>
             <strong>Akses Kontak WhatsApp:</strong> Nomor WhatsApp yang Anda
             daftarkan dipublikasikan di halaman profil/proyek agar calon mitra
-            dapat menghubungi Anda secara langsung (*direct chat*).
+            dapat menghubungi Anda secara langsung.
           </li>
         </ul>
       </div>
@@ -111,18 +111,7 @@ const faqs: Faqs[] = [
                 dipungut biaya pendaftaran.
               </p>
             </div>
-            <div>
-              <p className="font-semibold text-slate-900">
-                Bagaimana cara membuat &quot;Lapak Jasa&quot; agar dilirik calon
-                klien?
-              </p>
-              <p className="text-slate-600">
-                Masuk ke akun Anda &gt; Klik{" "}
-                <strong>&quot;Buka Lapak Jasa&quot;</strong> &gt; Masukkan
-                keahlian, lokasi, serta foto hasil kerja terbaik Anda &gt;
-                Bagikan link ke status WhatsApp atau media sosial Anda!
-              </p>
-            </div>
+
             <div>
               <p className="font-semibold text-slate-900">
                 {" "}
@@ -131,7 +120,8 @@ const faqs: Faqs[] = [
               <p className="text-slate-600">
                 Selalu buat kesepakatan pembagian pembayaran di awal (misal: DP
                 30% - 50%), simpan bukti chat/pengerjaan, dan laporkan pengguna
-                bermasalah melalui tombol <strong>Lapor Akun</strong>.
+                bermasalah dengan hubungi pihak pengelola platform melalu kontak
+                bantuan.
               </p>
             </div>
           </div>
@@ -204,9 +194,6 @@ const faqs: Faqs[] = [
         </p>
         <p className="flex items-center gap-2">
           <strong>Email Bantuan:</strong> bantuan@kerjabagus.com
-        </p>
-        <p className="flex items-center gap-2">
-          <strong>Kantor:</strong> KerjaBagus HQ - Jakarta, Indonesia
         </p>
       </div>
     ),

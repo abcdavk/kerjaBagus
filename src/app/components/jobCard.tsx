@@ -138,7 +138,7 @@ export default function JobCard({
           <button
             type="button"
             onClick={handleBookmark}
-            className={`h-9 w-9 flex items-center justify-center rounded-lg border transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-[1.01] ${
+            className={`h-9 w-9 flex items-center justify-center cursor-pointer rounded-lg border transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-[1.01] ${
               saved
                 ? "bg-green-50 border-[#386641]/30 text-[#386641]"
                 : "border-gray-200 hover:bg-gray-50 text-gray-500"

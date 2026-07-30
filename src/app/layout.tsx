@@ -13,11 +13,15 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "Kerja Bagus",
-  description: "Temukan proyek dan lowongan yang cocok untuk keahlianmu!",
+  description: "Temukan proyek dan lowongan yang cocok",
   icons: {
     icon: "/logo/logo.svg",
+    apple: "/logo/logo.svg",
+  },
+  openGraph: {
+    images: ["/logo/logo.svg"],
   },
 };
 
