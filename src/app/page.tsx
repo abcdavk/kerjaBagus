@@ -113,7 +113,7 @@ export default function Home() {
                     type="search"
                     value={keyword}
                     onChange={(e) => setKeyword(e.target.value)}
-                    placeholder="Cari kategori atau nama pekerjaan..."
+                    placeholder="Cari keahlian atau nama pekerjaan..."
                     className="bg-transparent ml-3 md:ml-4 text-sm md:text-lg font-medium outline-none w-full placeholder:text-gray-500"
                   />
                 </div>

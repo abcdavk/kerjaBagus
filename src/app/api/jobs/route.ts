@@ -20,7 +20,7 @@ export async function GET(request: Request) {
 
   const isOpen = searchParams.get("isOpen");
 
-  const tags = searchParams.get("tags"); // format: "react,nextjs,tailwind"
+  const tags = searchParams.get("tags");
   const matchAllTags = searchParams.get("matchAllTags") === "true";
 
   const sort = searchParams.get("sort") ?? "newest";
