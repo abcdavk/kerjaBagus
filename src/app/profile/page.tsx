@@ -565,7 +565,7 @@ export default function ProfilePage() {
             </div>
 
             <div className="space-y-3">
-              <div className="flex items-center justify-between">
+              <div className="md:flex items-center justify-between">
                 <h4 className="text-base font-bold text-gray-800">Skills</h4>
                 <span className="text-sm text-gray-500">
                   Tekan Enter atau tombol tambah untuk menambahkan.

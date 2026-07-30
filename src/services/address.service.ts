@@ -30,18 +30,49 @@ export interface Region {
   name: string;
 }
 
-export function getProvinces() {
-  return api<Province[]>(`${BASE_URL}/provinces.json`);
+function toTitleCase(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
-export function getRegencies(provinceId: string) {
-  return api<Regency[]>(`${BASE_URL}/regencies/${provinceId}.json`);
+export async function getProvinces() {
+  const provinces = await api<Province[]>(`${BASE_URL}/provinces.json`);
+  return provinces.map((province) => ({
+    ...province,
+    name: toTitleCase(province.name),
+  }));
 }
 
-export function getDistricts(regencyId: string) {
-  return api<District[]>(`${BASE_URL}/districts/${regencyId}.json`);
+export async function getRegencies(provinceId: string) {
+  const regencies = await api<Regency[]>(
+    `${BASE_URL}/regencies/${provinceId}.json`
+  );
+
+  return regencies.map((regency) => ({
+    ...regency,
+    name: toTitleCase(regency.name),
+  }));
 }
 
-export function getVillages(districtId: string) {
-  return api<Village[]>(`${BASE_URL}/villages/${districtId}.json`);
+export async function getDistricts(regencyId: string) {
+  const districts = await api<District[]>(
+    `${BASE_URL}/districts/${regencyId}.json`
+  );
+
+  return districts.map((district) => ({
+    ...district,
+    name: toTitleCase(district.name),
+  }));
+}
+
+export async function getVillages(districtId: string) {
+  const villages = await api<Village[]>(
+    `${BASE_URL}/villages/${districtId}.json`
+  );
+
+  return villages.map((village) => ({
+    ...village,
+    name: toTitleCase(village.name),
+  }));
 }

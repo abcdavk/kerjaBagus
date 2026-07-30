@@ -54,16 +54,22 @@ export async function GET(request: Request) {
     ];
   }
 
-  // Address
+  // Address (case insensitive)
   if (city || province) {
     where.address = {};
 
     if (city) {
-      where.address.city = city;
+      where.address.city = {
+        equals: city,
+        mode: "insensitive",
+      };
     }
 
     if (province) {
-      where.address.province = province;
+      where.address.province = {
+        equals: province,
+        mode: "insensitive",
+      };
     }
   }
 
