@@ -7,10 +7,9 @@ import StepAddress from "../components/register/StepAddress";
 import StepRoleAndConfirm from "../components/register/StepRoleAndConfirm";
 import Image from "next/image";
 import Link from "next/link";
-import { ApiError } from "@/services/api";
 import { register } from "@/services/auth.service";
 import { updateProfile } from "@/services/profiles.service";
-import { getUser, updateUser } from "@/services/users.service";
+import { updateUser } from "@/services/users.service";
 import { useRouter } from "next/navigation";
 
 export enum RegisterStep {
@@ -36,57 +35,65 @@ export default function RegisterPage() {
     village: "",
     postalCode: "",
     isFreelancer: true,
-    isClient: false
+    isClient: false,
   });
 
   const handleRegister = async () => {
     const {
-      name, email, password, phone, username, 
-      isClient, isFreelancer,
-      province, city, district, village, postalCode
+      name,
+      email,
+      password,
+      phone,
+      username,
+      isClient,
+      isFreelancer,
+      province,
+      city,
+      district,
+      village,
+      postalCode,
     } = formData;
-      
 
-    //   setLoading(true);
-  
     try {
+      // 1. Register User (tanpa mengirim isClient & isFreelancer di sini)
       const { user: registerUser } = await register({
         email,
         username,
         displayName: name,
         password,
         phone,
+      } as any);
+
+      // 2. Update role user (isClient & isFreelancer)
+      const user = await updateUser(registerUser.id, {
+        isClient,
         isFreelancer,
-        isClient
       });
 
-      const user = await getUser(registerUser.id);
+      // 3. Update data alamat di profile
+      if (user?.profile?.id) {
+        await updateProfile(user.profile.id, {
+          address: {
+            country: "Indonesia",
+            province,
+            city,
+            district,
+            village,
+            postalCode,
+          },
+        } as any);
+      }
 
-      const profile = await updateProfile(user.profile.id, {
-        address: {
-          country: "Indonesia",
-          province,
-          city,
-          district,
-          village,
-          postalCode
-        }
-      });
-
-      router.push("/profile")
+      // 4. Pindah ke halaman profil jika berhasil
+      router.push("/profile");
     } catch (err) {
-      // if (err instanceof ApiError) {
-      //   console.error(err.message);
-      // }
-      //  else {
-      //   setError("Terjadi kesalahan.");
-      // }
+      console.error("Gagal melakukan registrasi:", err);
     }
   };
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-start bg-gradient-to-b from-[#FAF8F0] via-[#FAF8F0] to-[#E2E8DD] px-4 pt-12 pb-16">
-      <div className="mb-6 text-center flex flex-col items-center justify-center">
+      <div className="mb-6 flex flex-col items-center justify-center text-center">
         <Link href="/" className="flex flex-col items-center gap-2">
           <Image
             src="/logo/kerjabagus_icon.svg"
@@ -97,33 +104,32 @@ export default function RegisterPage() {
           />
         </Link>
       </div>
-      {/* <div> */}
-        {step === RegisterStep.ACCOUNT && (
-          <StepAccount
-            formData={formData}
-            setFormData={setFormData}
-            next={() => setStep(RegisterStep.ADDRESS)}
-          />
-        )}
 
-        {step === RegisterStep.ADDRESS && (
-          <StepAddress
-            formData={formData}
-            setFormData={setFormData}
-            next={() => setStep(RegisterStep.CONFIRM)}
-            back={() => setStep(RegisterStep.ACCOUNT)}
-          />
-        )}
+      {step === RegisterStep.ACCOUNT && (
+        <StepAccount
+          formData={formData}
+          setFormData={setFormData}
+          next={() => setStep(RegisterStep.ADDRESS)}
+        />
+      )}
 
-        {step === RegisterStep.CONFIRM && (
-          <StepRoleAndConfirm
-            formData={formData}
-            setFormData={setFormData}
-            back={() => setStep(RegisterStep.ADDRESS)}
-            next={() => handleRegister()}
-          />
-        )}
-      {/* </div> */}
+      {step === RegisterStep.ADDRESS && (
+        <StepAddress
+          formData={formData}
+          setFormData={setFormData}
+          next={() => setStep(RegisterStep.CONFIRM)}
+          back={() => setStep(RegisterStep.ACCOUNT)}
+        />
+      )}
+
+      {step === RegisterStep.CONFIRM && (
+        <StepRoleAndConfirm
+          formData={formData}
+          setFormData={setFormData}
+          back={() => setStep(RegisterStep.ADDRESS)}
+          next={() => handleRegister()}
+        />
+      )}
     </div>
   );
 }

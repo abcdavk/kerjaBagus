@@ -211,7 +211,6 @@ export default function ProfilePage() {
     field: K,
     value: ProfileFormState[K],
   ) => {
-    // Guard: field updates should only ever be applied while in edit mode.
     if (!isEditing) return;
 
     setFormData((prev) => ({
@@ -329,9 +328,6 @@ export default function ProfilePage() {
     }
   };
 
-  // Bio & headline inline-edit handlers only ever get wired to EditableCard
-  // when isEditing is true (see render below), so they can't fire while
-  // the page is in read-only mode.
   const handleOnChangeBio = async (value: string) => {
     if (!profileData) return;
     if (profileData.bio === value) return;

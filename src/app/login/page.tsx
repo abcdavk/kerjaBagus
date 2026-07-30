@@ -117,13 +117,6 @@ export default function LoginPage() {
             {loading ? "Masuk..." : "Masuk"}
           </button>
 
-          {/* <button
-            type="button"
-            className="w-full rounded-lg bg-gray-100 py-3 text-sm font-semibold text-gray-400 cursor-not-allowed transition"
-          >
-            Lanjutkan
-          </button> */}
-
           <div className="text-center pt-2">
             <Link
               href="/register"
